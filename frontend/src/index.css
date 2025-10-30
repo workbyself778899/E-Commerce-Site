@@ -5,3 +5,7 @@ font-family: Poppins;
 .background1{
     background-image: url(./assets/insta.png);
 }
+
+.bg-account{
+    background-image: url(./assets/account.png);
+}
