@@ -6,7 +6,7 @@ import { FaPhone } from "react-icons/fa6";
 import { MdAccessTimeFilled } from "react-icons/md";
 const Contact = () => { 
   return (
-    <div>
+    <div className='pb-20'>
           <div className="flex flex-col justify-center items-center h-[316px] bg-account "> 
                 <img src={logo} className='h-[77px]' alt="M" />
                   <h1 className='text-[48px] font-medium'>Contact</h1>

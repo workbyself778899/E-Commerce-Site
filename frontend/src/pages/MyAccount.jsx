@@ -17,6 +17,8 @@ const MyAccount = () => {
             </p>
            </div>
         <div className="flex justify-around py-18 b">
+
+
             {/* login  */}
             <div className="">
                 <h1 className='text-[38px] font-semibold mb-4'>Log In</h1>
@@ -39,6 +41,8 @@ const MyAccount = () => {
 
                 </form>
             </div>
+
+
             {/* Register  */}
             <div className="" >
               <h1 className='text-[38px] font-semibold mb-4'>Register</h1>
@@ -60,8 +64,7 @@ const MyAccount = () => {
             </div>
         </div>
     </div>
-    <Method></Method>
-    <Footer></Footer>
+    
 
    </>
   )
