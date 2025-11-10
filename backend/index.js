@@ -1,6 +1,6 @@
 const express = require('express');
-
 const app = express();
+
 
 // api call supporting code
 app.use(express.json());
@@ -14,9 +14,15 @@ require("./dbConnection/dbConnect");
 const user = require('./routes/user');
 app.use('/user',user)
 
+const blog = require('./routes/blog');
+app.use('/blog',blog)
+
+
 app.get('/',(req,res)=>{
     res.send("Show the code")
 })
+
+
 
 app.listen(process.env.PORT,()=>{
     console.log("server running");

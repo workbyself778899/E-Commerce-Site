@@ -11,12 +11,16 @@ const imagekit = new ImageKit({
 
 const editUser = async(req,res)=>{
     try {
-    const result = await imagekit.files.upload({
-        file: req.file.buffer.toString('base64'),
-        fileName: req.file.originalname,
-    })
+    let imageUrl;
+    if(req.file){
+              // Upload only if image is provided
+           const result = await imagekit.files.upload({
+            file: req.file.buffer.toString('base64'),
+             fileName: req.file.originalname,
+        })
     // Get the image url after the upload in ImageKit
-    const imageUrl = result.url
+     imageUrl = result.url
+    }
 
     const {id} = req.query   //Take User Id
     const { username }= req.body
@@ -24,9 +28,9 @@ const editUser = async(req,res)=>{
     if(getUser==username) return res.send({message:"This username already exist"});
     const newUser = await User.findByIdAndUpdate(id,{
         username,
-        image: imageUrl
+        ...(imageUrl && {image: imageUrl})
     },{new:true})
-
+    res.status(200).json({message:"Success in user edit ",newUser})
     } catch (error) {
         res.status(500).json({error: error.message})
     }

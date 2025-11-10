@@ -23,7 +23,7 @@ const userSchema = new mongoose.Schema({
         required:[true,"user role is required"],     
     },
     image:{
-        type:String
+        type:String,
     },
     cart:[],
     favorites:[]

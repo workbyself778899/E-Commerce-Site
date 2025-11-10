@@ -6,6 +6,9 @@ const router = express.Router();
 const bcrypt= require('bcrypt');
 const { editUser } = require('../controllers/editUser');
 const multer = require('multer');
+const jwt = require('jsonwebtoken');
+const verifyToken = require('../middleware/verifyToken');
+
 
 // Register user
 router.post('/register',async(req,res)=>{
@@ -44,7 +47,9 @@ try {
     const checkPassword = await bcrypt.compare(password, findEmail.password)
     if(!checkPassword) res.send("Invalid data for login")
 
-        res.send("login success")   
+        // Token for user 
+    const token = jwt.sign({_id:findEmail._id},process.env.TOKEN_SECREAT);
+    res.header('auth-token', token).send({message:"User is logeed In", token,findEmail})
 } catch (error) {
     console.log(error)
 }
@@ -53,6 +58,18 @@ try {
 router.post("/pr",requestPasswordReset);
 router.post("/reset/:id/:token",resetPassword);
 
-router.put('/edit', upload.single('image'),editUser)
+router.put('/edit',verifyToken ,upload.single('image'),editUser)
+
+// Get user details
+router.get('/details/:id',async(req,res)=>{
+try {
+        const {id} = req.params;
+    const user = await User.findById(id).select('-password');
+    res.status(200).json({message:"See the user", user})
+} catch (error) {
+    res.send(error);
+}
+
+})
 
 module.exports = router;    
