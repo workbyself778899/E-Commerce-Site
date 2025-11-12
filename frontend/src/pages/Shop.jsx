@@ -1,8 +1,11 @@
 import React from 'react'
+import SecondHeader from '../component/Header/SecondHeader'
 
-const Shop = () => {
+const Shop = () => { 
   return (
-    <div>Shop</div>
+    <div>
+      <SecondHeader text="Shop"></SecondHeader>
+    </div>
   )
 }
 

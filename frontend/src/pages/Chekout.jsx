@@ -1,9 +1,12 @@
 import React from 'react'
+import SecondHeader from '../component/Header/SecondHeader'
 
-const Chekout = () => {
+const Checkout = () => { 
   return (
-    <div>Chekout</div>
+    <div>
+      <SecondHeader text="Checkout"></SecondHeader>
+    </div>
   )
 }
 
-export default Chekout
+export default Checkout

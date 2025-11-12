@@ -1,21 +1,13 @@
 import React from 'react'
-import { MdKeyboardArrowRight } from 'react-icons/md'
-import logo from "../assets/logo.png"
 import { FaLocationDot } from "react-icons/fa6";
 import { FaPhone } from "react-icons/fa6";
 import { MdAccessTimeFilled } from "react-icons/md";
-const Contact = () => { 
+import SecondHeader from '../component/Header/SecondHeader';
+const Contact = () => {  
   return (
     <div className='pb-20'>
-          <div className="flex flex-col justify-center items-center h-[316px] bg-account "> 
-                <img src={logo} className='h-[77px]' alt="M" />
-                  <h1 className='text-[48px] font-medium'>Contact</h1>
-                  <p className="flex items-center gap-2"> 
-                    <span className='text-[16px] font-medium'>Home  </span> 
-                    <MdKeyboardArrowRight />
-                    <span>Contact</span>
-                    </p>
-          </div>
+        
+         <SecondHeader text="Contact"></SecondHeader>
 
           <div className='my-25'>
             <h1 className="font-semibold text-[36px] text-center">

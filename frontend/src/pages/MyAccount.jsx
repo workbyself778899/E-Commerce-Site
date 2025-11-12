@@ -3,19 +3,12 @@ import { MdKeyboardArrowRight } from "react-icons/md";
 import Method from '../component/Footers/Method';
 import Footer from '../component/Footers/Footer';
 import logo from "../assets/logo.png"
+import SecondHeader from '../component/Header/SecondHeader';
 const MyAccount = () => { 
   return (
    <>
     <div className=' flex flex-col justify-center'>
-        <div className="flex flex-col justify-center items-center h-[316px] bg-account "> 
-           <img src={logo} className='h-[77px]' alt="M" />
-          <h1 className='text-[48px] font-medium'>My Account</h1>
-          <p className="flex items-center gap-2"> 
-            <span className='text-[16px] font-medium'>Home  </span> 
-            <MdKeyboardArrowRight />
-            <span>My account</span>
-            </p>
-           </div>
+        <SecondHeader text='My Account'></SecondHeader>
         <div className="flex justify-around py-18 b">
 
 
