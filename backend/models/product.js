@@ -5,8 +5,8 @@ const productSchema = new mongoose.Schema({
         required:[true,"Product name is required"]
     },
     photo:{
-        type:Array,
-        required:[true,"Atlest is need one Photo"]
+        type:String,
+        required:[true,"Photo is required"]
     },
     price:{
         type:Number,
@@ -14,9 +14,11 @@ const productSchema = new mongoose.Schema({
     },
     type:{
         type:String,
-        enum:["Table","Chair","Sofa"]
+        enum:["Table","Chair","Sofa","Hybrid"],
+    },
+    body:{
+        type:String
     }
-
 });
 
 module.exports=mongoose.model('products', productSchema)

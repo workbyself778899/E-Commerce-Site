@@ -17,6 +17,9 @@ app.use('/user',user)
 const blog = require('./routes/blog');
 app.use('/blog',blog)
 
+const product = require('./routes/product');
+app.use('/product',product)
+
 
 app.get('/',(req,res)=>{
     res.send("Show the code")

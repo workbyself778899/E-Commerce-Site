@@ -14,19 +14,19 @@ const blogEdit = async(req,res)=>{
 
     const {title, contain, categories} = req.body;
     const {id} = req.params;
-    console.log(id)
+    // console.log(id)
 
-    const findId = await Blog.findOne({id});
-    if(!findId) return res.send("This user id is not avaliable");
+    const findId = await Blog.findById(id);
+    if(!findId) return res.send("This blog id is not avaliable");
 
      const newBlog = await Blog.findByIdAndUpdate(id,{
-        title,
-        contain,
+        ...(title && {title}),      
+        ...(contain && {contain}),
         ...(categories && {categories}),
         ...(imageUrl && {image: imageUrl})
      },{new:true})
 
-    console.log(newBlog)
+    // console.log(newBlog)
     res.send({message:"Successfully, Blog is Updated ",newBlog})
 
   } catch (error) {

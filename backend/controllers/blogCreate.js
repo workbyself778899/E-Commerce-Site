@@ -26,7 +26,7 @@ try {
     res.status(200).json({message:"Successfully, Blog is Created"},newBlog)
 
 } catch (error) {
-    res.status(500).json({message:"error occure", error:error.message})
+    res.status(500).json({message:"error occure in blogCreate file", error:error.message})
 }
 
 }
