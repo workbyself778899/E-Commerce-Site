@@ -11,7 +11,7 @@ router.post('/add',orderCreate)
 // Edit order is not allowed
 
 // Delete order
-router.delete('/delete',orderDelete)
+router.delete('/delete/:id',orderDelete)
 
 // Read order
 router.get('/all',orderReadAll)

@@ -19,7 +19,7 @@ const orderCreate = async(req,res)=>{
             zip_code,
         })
         await newOrder.save();
-        res.send({message:"Successfully, Order has been Created"})
+        res.send({message:"Successfully, Order has been Created",newOrder})
     } catch (error) {
         res.status(500).json({message:"Error in orderCreate file", error: error.message})
     }
