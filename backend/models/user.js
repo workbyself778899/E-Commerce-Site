@@ -25,8 +25,17 @@ const userSchema = new mongoose.Schema({
     image:{
         type:String,
     },
-    cart:[],
-    favorites:[]
+    cart:[
+          {
+      productId: { type: mongoose.Schema.Types.ObjectId, ref: "Product" },
+      quantity: { type: Number, default: 1 }
+    }
+    ],
+    favourites:[
+          {
+      productId: { type: mongoose.Schema.Types.ObjectId, ref: "Product" }
+    }
+    ]
 },
 {timestamps:true})
 module.exports = mongoose.model('user',userSchema)

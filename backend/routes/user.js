@@ -77,10 +77,10 @@ router.post('/add-to-cart/:id',async(req,res)=>{
     try {
     const { id } = req.params; // USer ID
     const { productId } = req.body;
-    console.log("user id",id)
+    
       const user = await User.findById(id);
       if(!user) return res.status(404).json({message:"User not found"});
-      console.log(user)
+      
 
       // Check if product already exit
       const productIndex =  user.cart.findIndex((items)=>
@@ -131,7 +131,7 @@ router.post("/add-to-fav/:userId", async (req, res) => {
     res.status(200).json({ message: "Added to favourites", favourites: user.favourites });
 
   } catch (error) {
-    res.status(500).json({ error: error.message });
+    res.status(500).json({ error:"Error in user File",error: error.message });
   }
 });
 

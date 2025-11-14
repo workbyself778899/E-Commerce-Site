@@ -45,6 +45,10 @@ const orderSchema = new mongoose.Schema({
      zip_code:{
         type:String
     },
+    total_cost:{
+        type:Number,
+        required:[true,"Prices of product is required"]
+    }
 
 
 },{timestamps:true})
