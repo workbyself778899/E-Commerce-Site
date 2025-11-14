@@ -16,9 +16,25 @@ const orderSchema = new mongoose.Schema({
         type:String,
         required:[true,"City Name is required"]
     },
-     provience:{
+     province:{
         type:String,
-        required:[true,"Provience Name is required"]
+        required:[true,"Province Name is required"]
+    },
+     address:{
+        type:String,
+        required:[true,"Address is required"]
+    },
+     phone:{
+        type:Number,
+        required:[true,"Phone number is required"]
+    }, 
+    email:{
+        type:String,
+        required:[true,"Email address is required"]
+    },
+     product:{
+        type:Object,
+        required:[true,"Atleast one product is required"]
     },
     company_name:{
         type:String

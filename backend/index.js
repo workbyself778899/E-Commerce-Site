@@ -20,7 +20,9 @@ app.use('/blog',blog)
 const product = require('./routes/product');
 app.use('/product',product)
 
-
+const order = require('./routes/order')
+app.use('/order',order)
+    
 app.get('/',(req,res)=>{
     res.send("Show the code")
 })
