@@ -22,6 +22,9 @@ app.use('/product',product)
 
 const order = require('./routes/order')
 app.use('/order',order)
+
+const contact = require('./routes/contact')
+app.use('/contact',contact)
     
 app.get('/',(req,res)=>{
     res.send("Show the code")
