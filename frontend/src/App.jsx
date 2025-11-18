@@ -14,9 +14,10 @@ import Details from './pages/Details'
 import Cart from './pages/Cart'
 import Checkout from './pages/Chekout'
 import NotFound from './pages/NotFound'
-import Favorites from './pages/Favorites'
 import MainLayout from './pages/MainLayout'
 import About from './pages/About'
+import SingleProduct from './pages/SingleProduct'
+import ResetPass from './pages/ResetPass'
 
 
 const App = () => {   
@@ -36,9 +37,10 @@ const App = () => {
           <Route path="/contact" element={<Contact/>}> </Route>
           <Route path="/cart" element={<Cart />}> </Route>
           <Route path="/about" element={<About/>}></Route>
-          <Route path='/favorites' element={<Favorites/>}></Route>
+          <Route path="/single-product/:id" element={<SingleProduct/>}></Route>
+          
       </Route>
-      
+      <Route path="/user/reset/:id/:token" element={<ResetPass/>}></Route>
       <Route path='*' element={<NotFound/>}></Route>
    
     </Routes>

@@ -2,16 +2,20 @@ import React from 'react'
 
 const Home = () => {
   return (
-    <div className='bg-[#FBEBB5]'>
-      <div className="h-[1000px]">
-        Imag
-
-        <h1 className="text-4xl font-semibold py-2">
-          <div className="py-2">Rocket single</div>   
-          <div className="py-2">seater</div>
+    <div className='bg-[#FBEBB5] flex justify-between items-center pt-8 pr-20 pl-70 '>
+      
+      <div className="">
+          <h1 className="py-2 font-medium text-[64px]">
+          <div className="">Rocket single</div>   
+          <div className="pb-3">seater</div>
         </h1>
-        <button className='border-b-2 pb-2'>Shop Now</button>
+        <button className='border-b-2 pb-2 cursor-pointer font-medium text-[24px] '>Shop Now</button>
       </div>
+
+      <div className="">
+        <img src="/chair 1.png" className='h-[700px]  ' alt="No image" />
+      </div>
+
     </div>
   )
 }

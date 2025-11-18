@@ -17,9 +17,9 @@ router.post('/register',async(req,res)=>{
    try {
     // if email exist 
      const getEmail = await User.findOne({email})
-    if(getEmail) return res.send({message:"Email Already exist"})
+    if(getEmail) return res.status(409).json({message:"Email Already exist"})
         const getUser = await User.findOne({username});
-    if(getUser) return res.send({message:"Username already exist"})
+    if(getUser) return res.status(409).json({message:"Username already exist"})
 
         // this Password doesn't work because of encryption 
      const newUser = new User({
@@ -28,9 +28,16 @@ router.post('/register',async(req,res)=>{
         password :"nopassword"
     })
     await newUser.save();
-    res.send({message:"User Account Created Successfully", newUser})
+    requestPasswordReset(email)
+     return res.status(201).json({
+      message: "Successfully, User is register check your email",
+      user: newUser,
+    });
    } catch (error) {
-    console.log(error)
+     return res.status(500).json({
+      message: "Internal Server Error",
+      error,
+    });
    }
 })
 
@@ -55,7 +62,7 @@ try {
 }
 })
 
-router.post("/pr",requestPasswordReset);
+// router.post("/pr",requestPasswordReset);
 router.post("/reset/:id/:token",resetPassword);
 
 router.put('/edit',verifyToken ,upload.single('image'),editUser)

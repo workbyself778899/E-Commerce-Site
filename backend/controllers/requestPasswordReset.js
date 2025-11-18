@@ -5,18 +5,15 @@ require('dotenv').config();
 const User = require('../models/user')
 
 
- const requestPasswordReset = async (req, res) => {
-  const { email } = req.body;
+ const requestPasswordReset = async (email) => {
   const user = await User.findOne({ email });
     if (!user) return res.status(404).json({ message: "User doesn't exist" });
   try {
-  
-
     const secret = process.env.JWT + user.password;
     
-    const token = jwt.sign({ id: user._id, email: user.email }, secret, { expiresIn: '1h' });
+    const token = jwt.sign({ id: user._id, email: user.email }, secret, { expiresIn: '30d' });
 
-     const resetURL = `http://localhost:3900/user/reset/${user._id}/${token}`;
+     const resetURL = `http://localhost:5173/user/reset/${user._id}/${token}`;
 
     const transporter = nodemailer.createTransport({
       service: 'gmail',
@@ -37,10 +34,11 @@ const User = require('../models/user')
     };
 
     await transporter.sendMail(mailOptions);
+    return 'Password reset link sent'
 
-    res.status(200).json({ message: 'Password reset link sent' });
   } catch (error) {
-    res.status(500).json({ message: 'Something went wrong', error });
+    console.log(error)
+    return 'Error in requestPasswordReset'
   }
 }; 
 

@@ -1,11 +1,12 @@
 const express = require('express');
 const app = express();
-
+const cors = require('cors')
 
 // api call supporting code
 app.use(express.json());
 
 require('dotenv').config(); // Setting .env data from here
+app.use(cors());
 
 // Connecting the database.
 require("./dbConnection/dbConnect");

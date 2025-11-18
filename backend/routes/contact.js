@@ -1,7 +1,7 @@
 const router = require('express').Router();
 const Contact = require('../models/contact')
 
-router.push('/send',async(req,res)=>{
+router.post('/send',async(req,res)=>{
    try {
      const {name, email, subject, message} = req.body;
     const add = new Contact({
@@ -17,7 +17,7 @@ router.push('/send',async(req,res)=>{
    }
 })
 
-route.get('/get',async(req,res)=>{
+router.get('/get',async(req,res)=>{
     try {
         const getData = await Contact.find();
          res.send({message:"Successfully,contact has been  found",getData})
