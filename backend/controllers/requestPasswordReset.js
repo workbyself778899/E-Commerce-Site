@@ -41,5 +41,5 @@ const User = require('../models/user')
     return 'Error in requestPasswordReset'
   }
 }; 
-
+ 
 module.exports= {requestPasswordReset}

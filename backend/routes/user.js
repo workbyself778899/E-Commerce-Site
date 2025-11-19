@@ -8,6 +8,7 @@ const { editUser } = require('../controllers/editUser');
 const multer = require('multer');
 const jwt = require('jsonwebtoken');
 const verifyToken = require('../middleware/verifyToken');
+const nodemailer = require("nodemailer");
 
 
 // Register user
@@ -48,11 +49,11 @@ const upload = multer({storage: multer.memoryStorage()});
 router.post('/login',  async(req,res)=>{
     const {email, password} =req.body;
     const findEmail = await User.findOne({email});
-    if(!findEmail) res.send("Email dosen't exist")
+    if(!findEmail) return res.status(400).json({message:"Email dosen't exist"})
 try {
     
     const checkPassword = await bcrypt.compare(password, findEmail.password)
-    if(!checkPassword) res.send("Invalid data for login")
+    if(!checkPassword) return res.status(400).json({message:"Invalid data for login"})
 
         // Token for user 
     const token = jwt.sign({_id:findEmail._id},process.env.TOKEN_SECREAT);
@@ -60,6 +61,45 @@ try {
 } catch (error) {
     console.log(error)
 }
+})
+
+// Forget password
+router.post("/enter-email",async(req,res)=>{
+  const {email} = req.body;
+   const user = await User.findOne({ email });
+      if (!user) return res.status(404).json({ message: "User doesn't exist" });
+    try {
+      const secret = process.env.JWT + user.password;
+      
+      const token = jwt.sign({ id: user._id, email: user.email }, secret, { expiresIn: '30d' });
+  
+       const resetURL = `http://localhost:5173/user/reset/${user._id}/${token}`;
+  
+      const transporter = nodemailer.createTransport({
+        service: 'gmail',
+        auth: {
+          user: 'ayush.email.977@gmail.com',
+          pass: process.env.PASSWORD,
+        },
+      });
+  
+      const mailOptions = {
+        to: user.email,
+        from: process.env.EMAIL,
+        subject: 'Password Reset Request',
+        text: `You are receiving this because you (or someone else) have requested the reset of the password for your account.\n\n
+        Please click on the following link, or paste this into your browser to complete the process:\n\n
+        ${resetURL}\n\n
+        If you did not request this, please ignore this email and your password will remain unchanged.\n`,
+      };
+  
+      await transporter.sendMail(mailOptions);
+      res.send({message:'Password reset link  sent to your gmail account'})
+  
+    } catch (error) {
+      console.log(error)
+      res.status(500).json({message:'Error in requestPasswordReset' ,error: error.message}) 
+    }
 })
 
 // router.post("/pr",requestPasswordReset);

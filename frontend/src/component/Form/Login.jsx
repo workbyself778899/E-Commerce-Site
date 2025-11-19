@@ -1,8 +1,10 @@
 import axios from "axios";
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { toast } from "react-toastify";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+import { FaEye, FaEyeSlash } from "react-icons/fa";
+
 const Login = () => {
   const {
     register,
@@ -12,11 +14,14 @@ const Login = () => {
     watch,
     formState: { errors },
   } = useForm();
+
   const navigate = useNavigate();
-  // Watch checkbox state
   const remember = watch("rememberMe");
 
-  // Load saved email on page load
+  // 👁️ Show/Hide Password State
+  const [showPassword, setShowPassword] = useState(false);
+
+  // Load saved email
   useEffect(() => {
     const savedEmail = localStorage.getItem("rememberEmail");
     if (savedEmail) {
@@ -26,32 +31,29 @@ const Login = () => {
   }, [setValue]);
 
   const onSubmit = async (data) => {
-    console.log("Login Data:", data);
-     if (data.rememberMe) {
+    // console.log("Login Data:", data);
+
+    if (data.rememberMe) {
       localStorage.setItem("rememberEmail", data.email);
     } else {
       localStorage.removeItem("rememberEmail");
     }
 
-    const res = await axios.post('http://localhost:3900/user/login',data)
-    console.log('response', res.data)
-    if(res.status == 200) {
-      toast.success(res.data.message)
-       // set auth-token in localStorage
-      localStorage.setItem('u-token',res.data.token)
-      // Store User Id 
-      localStorage.setItem('uid',res.data.findEmail._id)
-      reset();
-      setTimeout(()=>{
-        navigate('/');
-      },5000)
+    try {
+      const res = await axios.post("http://localhost:3900/user/login", data);
+
+      if (res.status === 200) {
+        toast.success(res.data.message);
+
+        localStorage.setItem("u-token", res.data.token);
+        localStorage.setItem("uid", res.data.findEmail._id);
+
+        reset();
+        setTimeout(() => navigate("/"), 1500);
+      }
+    } catch (error) {
+      toast.error(error.response?.data?.message || "Login failed");
     }
-   
-
-
-   
-
-    // Continue login API here...
   };
 
   return (
@@ -63,19 +65,35 @@ const Login = () => {
         <label className="text-[16px] font-medium">Email address</label>
         <input
           type="text"
-          className="px-3 py-2 my-4 mb-7 w-[423px] rounded-lg border"
+          className="px-3 py-2 my-4 mb-2 w-[423px] rounded-lg border"
           {...register("email", { required: "Email is required" })}
         />
-        {errors.email && <p className="text-red-500 text-sm">{errors.email.message}</p>}
+        {errors.email && (
+          <p className="text-red-500 text-sm">{errors.email.message}</p>
+        )}
 
         {/* Password */}
         <label className="text-[16px] font-medium">Password</label>
-        <input
-          type="password"
-          className="px-3 py-2 my-4 w-[423px] rounded-lg border"
-          {...register("password", { required: "Password is required" })}
-        />
-        {errors.password && <p className="text-red-500 text-sm">{errors.password.message}</p>}
+
+        <div className="relative w-[423px] my-4">
+          <input
+            type={showPassword ? "text" : "password"}
+            className="px-3 py-2 w-full rounded-lg border"
+            {...register("password", { required: "Password is required" })}
+          />
+
+          {/* 👁️ Eye Icon Button */}
+          <span
+            className="absolute right-3 top-3 cursor-pointer text-gray-600"
+            onClick={() => setShowPassword(!showPassword)}
+          >
+            {showPassword ? <FaEyeSlash /> : <FaEye />}
+          </span>
+        </div>
+
+        {errors.password && (
+          <p className="text-red-500 text-sm">{errors.password.message}</p>
+        )}
 
         {/* Remember Me */}
         <div className="my-4 flex items-center gap-2">
@@ -85,14 +103,13 @@ const Login = () => {
 
         {/* Submit */}
         <div className="flex items-center gap-9">
-          <button
-            type="submit"
-            className="border px-8 py-3 rounded-xl"
-          >
+          <button type="submit" className="border px-8 py-3 rounded-xl">
             Log In
           </button>
 
-          <div className="text-blue-600 cursor-pointer">Lost your password?</div>
+          <div className="text-blue-600 cursor-pointer">
+            <Link to="/user/forget-email">Lost your password?</Link>
+          </div>
         </div>
       </form>
     </div>
