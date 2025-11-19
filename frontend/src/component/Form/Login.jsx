@@ -1,0 +1,102 @@
+import axios from "axios";
+import React, { useEffect } from "react";
+import { useForm } from "react-hook-form";
+import { toast } from "react-toastify";
+import { useNavigate } from "react-router-dom";
+const Login = () => {
+  const {
+    register,
+    handleSubmit,
+    setValue,
+    reset,
+    watch,
+    formState: { errors },
+  } = useForm();
+  const navigate = useNavigate();
+  // Watch checkbox state
+  const remember = watch("rememberMe");
+
+  // Load saved email on page load
+  useEffect(() => {
+    const savedEmail = localStorage.getItem("rememberEmail");
+    if (savedEmail) {
+      setValue("email", savedEmail);
+      setValue("rememberMe", true);
+    }
+  }, [setValue]);
+
+  const onSubmit = async (data) => {
+    console.log("Login Data:", data);
+     if (data.rememberMe) {
+      localStorage.setItem("rememberEmail", data.email);
+    } else {
+      localStorage.removeItem("rememberEmail");
+    }
+
+    const res = await axios.post('http://localhost:3900/user/login',data)
+    console.log('response', res.data)
+    if(res.status == 200) {
+      toast.success(res.data.message)
+       // set auth-token in localStorage
+      localStorage.setItem('u-token',res.data.token)
+      // Store User Id 
+      localStorage.setItem('uid',res.data.findEmail._id)
+      reset();
+      setTimeout(()=>{
+        navigate('/');
+      },5000)
+    }
+   
+
+
+   
+
+    // Continue login API here...
+  };
+
+  return (
+    <div>
+      <h1 className="text-[38px] font-semibold mb-4">Log In</h1>
+
+      <form className="flex flex-col" onSubmit={handleSubmit(onSubmit)}>
+        {/* Email */}
+        <label className="text-[16px] font-medium">Email address</label>
+        <input
+          type="text"
+          className="px-3 py-2 my-4 mb-7 w-[423px] rounded-lg border"
+          {...register("email", { required: "Email is required" })}
+        />
+        {errors.email && <p className="text-red-500 text-sm">{errors.email.message}</p>}
+
+        {/* Password */}
+        <label className="text-[16px] font-medium">Password</label>
+        <input
+          type="password"
+          className="px-3 py-2 my-4 w-[423px] rounded-lg border"
+          {...register("password", { required: "Password is required" })}
+        />
+        {errors.password && <p className="text-red-500 text-sm">{errors.password.message}</p>}
+
+        {/* Remember Me */}
+        <div className="my-4 flex items-center gap-2">
+          <input type="checkbox" {...register("rememberMe")} />
+          <span>Remember me</span>
+        </div>
+
+        {/* Submit */}
+        <div className="flex items-center gap-9">
+          <button
+            type="submit"
+            className="border px-8 py-3 rounded-xl"
+          >
+            Log In
+          </button>
+
+          <div className="text-blue-600 cursor-pointer">Lost your password?</div>
+        </div>
+      </form>
+    </div>
+  );
+};
+
+export default Login;

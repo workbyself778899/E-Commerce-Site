@@ -6,8 +6,11 @@ import { FaRegUser } from "react-icons/fa";
 import { Link, useLocation } from 'react-router-dom';
 import CardSlideBar from '../CardSlideBar';
 import Favourites from '../Favourites';
+import Logout from './Logout';
 
-const Header = () => { 
+const Header = () => {  
+
+
   const [showCart, setshowCart] = useState(false)
   const [showFav, setShowFav] = useState(false)
   // In home page Header background color change to yellow else white
@@ -18,7 +21,7 @@ const Header = () => {
   
   return (
     <div>
-      <div className={`flex w-full justify-end items-center gap-20 mr-20 py-3 px-4 ${getColor()}`}>
+      <div className={`flex w-full justify-end items-center gap-30 mr-20 py-3 pr-20 px-4 ${getColor()}`}>
         <ul className='flex gap-6 font-medium text-[16px] cursor-default'>
             <Link to="/"> 
             <li>Home</li>
@@ -35,10 +38,12 @@ const Header = () => {
             
         </ul>
         <ul className='flex items-center justify-baseline gap-6 text-[16px] cursor-pointer'>
+          
             <Link to="/myaccount">  <li> <FaRegUser size={18} /> </li> </Link>
             <li> <FiSearch size={18} /> </li>
             <li onClick={()=>setShowFav(!showFav)}> <FaRegHeart size={18} /></li>
             <li onClick={()=>setshowCart(!showCart)}> <AiOutlineShoppingCart size={18}/> </li> 
+           
         </ul>  
     </div>
     <div className='flex justify-end '>
