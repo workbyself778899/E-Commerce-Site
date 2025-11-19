@@ -19,6 +19,7 @@ import About from './pages/About'
 import SingleProduct from './pages/SingleProduct'
 import ResetPass from './pages/ResetPass'
 import ForgetPass from './component/Form/ForgetPass'
+import UpdateUserForm from './component/Form/UpdateUserForm'
 
 
 const App = () => {   
@@ -43,6 +44,7 @@ const App = () => {
       </Route>
       <Route path="/user/reset/:id/:token" element={<ResetPass/>}></Route>
       <Route path="/user/forget-email" element={<ForgetPass/>}></Route>
+      <Route path='/user/update' element={<UpdateUserForm/>} ></Route>
       <Route path='*' element={<NotFound/>}></Route>
    
     </Routes>

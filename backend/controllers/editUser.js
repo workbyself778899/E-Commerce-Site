@@ -27,7 +27,7 @@ const editUser = async(req,res)=>{
     const getUser = await User.findOne({username});
     if(getUser==username) return res.send({message:"This username already exist"});
     const newUser = await User.findByIdAndUpdate(id,{
-        username,
+       ...( username &&  {username:username}),
         ...(imageUrl && {image: imageUrl})
     },{new:true})
     res.status(200).json({message:"Success in user edit ",newUser})

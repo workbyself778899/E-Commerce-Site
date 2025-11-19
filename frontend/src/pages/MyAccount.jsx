@@ -10,6 +10,9 @@ import { ToastContainer, toast } from 'react-toastify';
 import Register from '../component/Form/Register';
 import Login from '../component/Form/Login';
 import Logout from '../component/Header/Logout';
+import UpdateUserForm from '../component/Form/UpdateUserForm';
+import EditUser from '../component/Form/EditUser';
+import { Link } from 'react-router-dom';
 
 const MyAccount = () => {   
 const id = localStorage.getItem('uid'); // user id
@@ -17,7 +20,7 @@ console.log(id)
 const [data, setData] = useState(null);
 
 useEffect(()=>{
-  const getUser = async()=>{
+  const getUser = async()=>{  
     try {
     const res = await axios.get(`http://localhost:3900/user/details/${id}`)
   console.log("user", res.data.user)
@@ -38,16 +41,27 @@ useEffect(()=>{
 
          {id ? (
             <div>
-              <h3 className="text-3xl font-bold text-center">Profile  </h3>  
-                <div className="flex flex-col gap-4 justify-center items-center">
+              
+
+                
+               
+                  {/* Profile  */}
+                  <div className="flex flex-col gap-4 justify-center items-center">
+                    <h3 className="text-3xl font-bold text-center">Profile  </h3>  
                  <div className="my-5 rounded-full object-cover  w-[200px] bg-amber-100 h[200px">
-                   <img src="./chair 1.png" className='object-contain p-9' alt="user"  />
+                   <img src={data?.image} className='rounded-full p-2' alt="user"  />
                  </div>
                   <p> Username: {data?.username} </p>
-                  <div>
+                  <div className='flex flex-col justify-between items-center gap-3'>
+                  
+                    <Link to="/user/update">  <EditUser></EditUser> </Link>
                     <Logout></Logout>
                   </div>
                 </div>
+
+               
+
+              
             </div>
             
          ):(
