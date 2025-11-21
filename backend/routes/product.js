@@ -12,7 +12,7 @@ const router = require('express').Router();
 const upload = multer({storage: multer.memoryStorage()});
 
 // add the product
-router.post('/add',verifyToken,verifyAdmin,upload.single('photo'),addProduct)
+router.post('/add',verifyToken,verifyAdmin,upload.single('photo'),addProduct)   
 
 // Edit the product
 router.put('/edit/:id',verifyToken,verifyAdmin,upload.single('photo'),productEdit)

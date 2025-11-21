@@ -32,7 +32,7 @@ const AdminPanel = () => {
         </div>
 
         <ul className="mt-4 space-y-3 px-3">
-          <Link to="/admin-panel/dashboard">
+          <Link to="/admin-panel">
           <li className="flex items-center gap-3 p-3 rounded hover:bg-gray-100 cursor-pointer">
             <FiHome size={22} />
             {open && "Dashboard"}

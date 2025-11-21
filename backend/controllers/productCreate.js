@@ -16,10 +16,10 @@ const addProduct = async(req,res)=>{
         }
         const {name,price,type,body} =req.body;
         const newProduct = new Product({
-            name,
-            price,
-            type,
-            body,
+            ...(name && {name}),
+            ...(price && {price}),
+            ...(type && {type}),
+            ...(body && {body}),
             ...(imageUrl && {photo: imageUrl})
         })
         await newProduct.save();

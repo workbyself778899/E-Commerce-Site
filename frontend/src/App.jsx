@@ -48,7 +48,7 @@ const App = () => {
 
           {/* For Admin Panle  */}
             <Route path='/admin-panel' element={<AdminPanel/>} >
-            <Route path='dashboard' element={<Dashboard/>}></Route>
+            <Route index element={<Dashboard/>}></Route>
             <Route path='order' element={<Order/>}></Route>
             <Route path='product' element={<Product/>}></Route>
             <Route path='contact' element={<ContactList/>}></Route>
