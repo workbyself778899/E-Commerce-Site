@@ -182,4 +182,12 @@ router.post("/add-to-fav/:userId", async (req, res) => {
   }
 });
 
+router.get('/all-user', async(req,res)=>{
+  try {
+    const count = await User.countDocuments();
+    res.send({data: count})
+  } catch (error) {
+    res.status(500).json({error:error.message})
+  }
+})
 module.exports = router;    

@@ -20,6 +20,11 @@ import SingleProduct from './pages/SingleProduct'
 import ResetPass from './pages/ResetPass'
 import ForgetPass from './component/Form/ForgetPass'
 import UpdateUserForm from './component/Form/UpdateUserForm'
+import AdminPanel from './component/Admin/AdminPanel'
+import Dashboard from './component/Admin/Dashboard'
+import Order from './component/Admin/Order'
+import Product from './component/Admin/Product'
+import ContactList from './component/Admin/ContactList'
 
 
 const App = () => {   
@@ -40,12 +45,24 @@ const App = () => {
           <Route path="/cart" element={<Cart />}> </Route>
           <Route path="/about" element={<About/>}></Route>
           <Route path="/single-product/:id" element={<SingleProduct/>}></Route>
+
+          {/* For Admin Panle  */}
+            <Route path='/admin-panel' element={<AdminPanel/>} >
+            <Route path='dashboard' element={<Dashboard/>}></Route>
+            <Route path='order' element={<Order/>}></Route>
+            <Route path='product' element={<Product/>}></Route>
+            <Route path='contact' element={<ContactList/>}></Route>
+            </Route>
           
       </Route>
       <Route path="/user/reset/:id/:token" element={<ResetPass/>}></Route>
       <Route path="/user/forget-email" element={<ForgetPass/>}></Route>
       <Route path='/user/update' element={<UpdateUserForm/>} ></Route>
+    
+
       <Route path='*' element={<NotFound/>}></Route>
+
+
    
     </Routes>
      

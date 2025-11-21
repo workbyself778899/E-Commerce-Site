@@ -13,8 +13,10 @@ import Logout from '../component/Header/Logout';
 import UpdateUserForm from '../component/Form/UpdateUserForm';
 import EditUser from '../component/Form/EditUser';
 import { Link } from 'react-router-dom';
-
-const MyAccount = () => {   
+import AdminPanel from '../component/Admin/AdminPanel';
+import AdminButton from '../component/Admin/AdminButton';
+ 
+const MyAccount = () => {     
 const id = localStorage.getItem('uid'); // user id
 console.log(id)
 const [data, setData] = useState(null);
@@ -48,14 +50,22 @@ useEffect(()=>{
                   {/* Profile  */}
                   <div className="flex flex-col gap-4 justify-center items-center">
                     <h3 className="text-3xl font-bold text-center">Profile  </h3>  
-                 <div className="my-5 rounded-full object-cover  w-[200px] bg-amber-100 h[200px">
-                   <img src={data?.image} className='rounded-full p-2' alt="user"  />
+                 <div className="flex flex-col items-center">
+                   <img src={data?.image}className="w-40 h-40 rounded-full object-cover shadow"alt="user"  />
                  </div>
                   <p> Username: {data?.username} </p>
                   <div className='flex flex-col justify-between items-center gap-3'>
                   
                     <Link to="/user/update">  <EditUser></EditUser> </Link>
                     <Logout></Logout>
+                  </div>
+                  <div className="">
+                    {/* Show Admin Panel if admin  */}
+                    {
+                      data?.role == "admin"? <div> 
+                        <AdminButton></AdminButton>
+                      </div> : (" ")
+                    }
                   </div>
                 </div>
 
