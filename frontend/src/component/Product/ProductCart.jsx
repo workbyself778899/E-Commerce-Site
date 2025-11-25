@@ -2,70 +2,29 @@ import React from "react";
 import { FaStar } from "react-icons/fa";
 import { FiShoppingCart } from "react-icons/fi";
 
-const ProductCard = () => {
- const product = [
-    {
-      id: 1,
-      title: "Wireless Headphone",
-      description: "High quality sound with noise cancellation.",
-      price: 2500,
-      image: "https://picsum.photos/300/200?random=1",
-    },
-    {
-      id: 2,
-      title: "Casual Shoes",
-      description: "Comfortable, stylish, and durable.",
-      price: 3200,
-      image: "https://picsum.photos/300/200?random=2",
-    },
-    {
-      id: 3,
-      title: "Smart Watch",
-      description: "Track your fitness and notifications.",
-      price: 4500,
-      image: "https://picsum.photos/300/200?random=3",
-    },
-    {
-      id: 4,
-      title: "Bluetooth Speaker",
-      description: "Powerful bass and clear sound.",
-      price: 1800,
-      image: "https://picsum.photos/300/200?random=4",
-    },
-  ];
+const ProductCard = ({name, price, image}) => {
 
   return (
-    <div className="w-64 bg-white rounded-xl shadow-md overflow-hidden hover:shadow-xl transition-all duration-300">
+    <div className="flex flex-col items-center justify-between w-[287px] h-[397px] bg-white rounded-xl  overflow-hidden hover:shadow-xl transition-all duration-300">
       
       {/* Product Image */}
-      <div className="h-48 bg-gray-100 flex items-center justify-center overflow-hidden">
+      <div className=" flex items-center justify-center overflow-hidden">
         <img
-          src={product.image}
-          alt={product.title}
-          className="object-cover w-full h-full hover:scale-110 transition-all duration-300"
+          src={image}
+          alt="Image Not Found"
+          className="object-contain object-center w-[287px] h-[287px] hover:scale-110 transition-all duration-300"
         />
       </div>
 
       {/* Content */}
-      <div className="p-4">
-        <h3 className="text-lg font-semibold text-gray-800 truncate">
-          {product.title}
+      <div className="">
+        <h3 className="text-lg ">
+          {name}
         </h3>
+        <p className="text-[24px] font-medium mt-2">
+          Rs. {Number(price).toLocaleString("en", { minimumFractionDigits: 2 })}
+        </p>
 
-        <div className="flex items-center gap-1 text-yellow-500 mt-1">
-          {[...Array(product.rating)].map((_, i) => (
-            <FaStar key={i} size={16} />
-          ))}
-        </div>
-
-        <p className="text-xl font-bold text-blue-600 mt-2">${product.price}</p>
-
-        <button
-          onClick={() => onAddToCart(product)}
-          className="mt-4 w-full flex items-center justify-center gap-2 bg-blue-600 text-white py-2 rounded-lg hover:bg-blue-700 active:scale-95 transition-all"
-        >
-          <FiShoppingCart size={20} /> Add to Cart
-        </button>
       </div>
     </div>
   );
