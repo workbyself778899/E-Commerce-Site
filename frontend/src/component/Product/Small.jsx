@@ -5,11 +5,13 @@ import { Link } from "react-router-dom"; // use react-router-dom
 const Small = ({ type }) => {
   const [products, setProducts] = useState([]);
   const [loading, setLoading] = useState(false);
+  console.log("type", type)
 
   // Fetch products by type
-  const fetchProducts = async (type) => {
+  const fetchProducts = async () => {
     setLoading(true);
     try {
+        console.log("type i", type)
       const res = await axios.get(`http://localhost:3900/product/type/${type}`);
       setProducts(res.data.products);
     } catch (err) {
@@ -20,6 +22,7 @@ const Small = ({ type }) => {
   };
 
   useEffect(() => {
+    if(!type) return
     fetchProducts(type);
   }, [type]);
 

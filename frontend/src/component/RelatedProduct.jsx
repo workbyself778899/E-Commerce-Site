@@ -9,8 +9,8 @@ const RelatedProduct = ({ type }) => {
   const [showAll, setShowAll] = useState(false); // state to toggle view more
 
   // Fetch products by type
-  const fetchProducts = async (type) => {
-    setLoading(true);
+  const fetchProducts = async () => {
+      setLoading(true);
     try {
       const res = await axios.get(`http://localhost:3900/product/type/${type}`);
       setProducts(res.data.products);
@@ -42,7 +42,7 @@ const RelatedProduct = ({ type }) => {
         <>
           <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
             {displayedProducts.map((product) => (
-             <Link to={`/single-product/${product._id}`}>
+             <Link to={`/single-product/${product?._id}`}>
               <ProductCard
                 key={product._id}
                 name={product.name}

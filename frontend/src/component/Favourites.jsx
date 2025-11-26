@@ -1,62 +1,105 @@
-import React, { useEffect, useState } from 'react'
+import axios from "axios";
+import React, { useEffect, useState } from "react";
 import { CgCloseR } from "react-icons/cg";
 import { IoMdCloseCircle } from "react-icons/io";
-import { Link } from 'react-router-dom';
-const Favourites = ({setShowFav, showFav}) => {
-  const [items, setItems] = useState([])
+import { Link } from "react-router-dom";
+import { toast, ToastContainer } from "react-toastify";
+
+const Favourites = ({ setShowFav, showFav }) => {
+  const [products, setProducts] = useState([]);
+  const userId = localStorage.getItem("uid");
+
+  // REMOVE FROM FAV
+  const removeFav = async (productId) => {
+    try {
+      const res = await axios.delete(
+        `http://localhost:3900/user/remove-from-fav/${userId}/${productId}`
+      );
+
+      toast.warn(res.data.message);
+
+      // Update state instantly
+      setProducts((prev) =>
+        prev.filter((item) => item.productId._id !== productId)
+      );
+    } catch (error) {
+      toast.error(error.message);
+    }
+  };
+
+  // GET FAVOURITES
+  const getFav = async () => {
+    try {
+      const res = await axios.get(
+        `http://localhost:3900/user/get-fav-products/${userId}`
+      );
+
+      console.log("Fav Data:", res.data.favourites);
+      setProducts(res.data.favourites); // Always an array
+    } catch (error) {
+      toast.error(error.message);
+    }
+  };
 
   useEffect(() => {
-    const load = () => {
-      try {
-        const favs = JSON.parse(localStorage.getItem('favourites') || '[]')
-        setItems(favs)
-      } catch (e) { setItems([]) }
-    }
-    load()
-    const onStorage = (e) => { if (e.key === 'favourites') load() }
-    window.addEventListener('storage', onStorage)
-    return () => window.removeEventListener('storage', onStorage)
-  }, [])
-
-  const remove = (idx) => {
-    const copy = [...items]
-    copy.splice(idx, 1)
-    setItems(copy)
-    localStorage.setItem('favourites', JSON.stringify(copy))
-  }
+    getFav();
+  }, []);
 
   return (
-      <div className=' max-h-[746px] w-[417px]  py-10'>
-        {/* title  */}
+    <div className="max-h-[746px] w-[417px] py-10">
+      <ToastContainer />
 
-        <div className='flex items-center justify-between mb-4 px-3'>
-            <div className="font-semibold text-[24px]">  Favourites  </div>
-            <div className="" onClick={()=>setShowFav(!showFav)}> <CgCloseR size={28} /> </div>
+      {/* Title */}
+      <div className="flex items-center justify-between mb-4 px-3">
+        <div className="font-semibold text-[24px]">Favourites</div>
+        <div onClick={() => setShowFav(!showFav)}>
+          <CgCloseR size={28} />
         </div>
-        {/* line */}
-       <div className="px-3">
-         <hr className='pb-4 w-[287px] text-[#D9D9D9] ' />
-       </div>
+      </div>
 
-        {/* favourites list  */}
-        <div className="space-y-4 px-3">
-          {items.length === 0 && <div className="text-sm text-gray-500">No favourites yet.</div>}
-          {items.map((it, idx) => (
-            <div key={idx} className="flex justify-between items-center">
-              <img src={it.photo} alt={it.name} className='max-h-[105px] w-[108px] object-contain' />
-              <div className="flex-1 px-3">
-                <h6 className="">{it.name}</h6>
-                <div className="text-[#B88E2F] font-medium">Rs. {it.price}</div>
+      {/* Line */}
+      <div className="px-3">
+        <hr className="pb-4 w-[287px] text-[#D9D9D9]" />
+      </div>
+
+      {/* List */}
+      <div className="space-y-4 px-3 overflow-y-auto max-h-[550px]">
+        {products.length > 0 ? (
+          products.map((data) => (
+            <div
+              key={data._id}
+              className="flex items-center justify-between bg-[#f9f9f9] p-3 rounded-lg"
+            >
+              {/* Left */}
+              <div className="flex items-center gap-4">
+                <img
+                  src={data.productId.photo}
+                  className="h-[70px] w-[70px] object-contain rounded-md bg-white"
+                  alt=""
+                />
+                <div>
+                  <p className="font-semibold">{data.productId.name}</p>
+                  <p className="text-sm text-gray-600">
+                    Rs {data.productId.price}
+                  </p>
+                </div>
               </div>
-              <div className="flex items-center justify-center">
-                <IoMdCloseCircle color='#9F9F9F' size={25} onClick={() => remove(idx)} />
-              </div>
+
+              {/* Remove */}
+              <button
+                onClick={() => removeFav(data.productId._id)}
+                className="text-red-500 hover:text-red-700"
+              >
+                <IoMdCloseCircle size={28} />
+              </button>
             </div>
-          ))}
-        </div>
-    
+          ))
+        ) : (
+          <p className="text-gray-500 text-center">No favourites yet.</p>
+        )}
+      </div>
     </div>
-  )
-}
+  );
+};
 
-export default Favourites
+export default Favourites;

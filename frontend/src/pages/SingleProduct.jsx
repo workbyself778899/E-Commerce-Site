@@ -9,8 +9,8 @@ import RelatedProduct from '../component/RelatedProduct';
 import Small from '../component/Product/Small';
 import { FaRegHeart } from "react-icons/fa";
 import { FaHeart } from "react-icons/fa6";
-
-const SingleProduct = ({name}) => {  
+import {toast, ToastContainer} from "react-toastify";
+const SingleProduct = ({name}) => {    
   const [size, setSize] = useState();
   const [color, setColor] = useState();
   const [select, setSelect] = useState(0)
@@ -43,6 +43,39 @@ const SingleProduct = ({name}) => {
     console.log(size)
   }
   
+  const addToCart =async(productId)=>{
+    try {
+      const id = localStorage.getItem('uid')
+      if (!id) {
+      toast.warning("Please login first");
+      return;
+    }
+    const res = await axios.post(`http://localhost:3900/user/add-to-cart/${id}`,{
+      productId,
+      quantity: count
+    });
+    toast.success(res.data.message || "Added To Cart")
+
+
+    } catch (error) {
+      toast.error(error.message)
+    }
+
+  }
+  const userId = localStorage.getItem('uid')
+  const fav = async(productId)=>{
+   try {
+    
+    const res = await axios.post(`http://localhost:3900/user/add-to-fav/${userId}`,{
+      productId
+    })
+    toast.success(res.data.message)
+   } catch (error) {
+    toast.error(error.message || "Message in SingleProduct of fav function" )
+   }
+  }
+
+
 
   useEffect(()=>{
     const getProduct = async()=>{
@@ -54,6 +87,7 @@ const SingleProduct = ({name}) => {
   },[id])
   return (
     <div>
+      <ToastContainer/>
       {/* little header  */}
       <div className="flex items-center gap-2 mb-9 mt-4  ">
         <div className="text-[#9F9F9F]">
@@ -115,6 +149,7 @@ const SingleProduct = ({name}) => {
               }
             </div>
           </div>
+
       {/* Add To Cart and count  */}
           <div className=" flex gap-4 my-4">
             <div className=" flex items-center px-3 gap-6 border rounded-xl border-[#9F9F9F]  "> 
@@ -123,7 +158,9 @@ const SingleProduct = ({name}) => {
               }} className='text-[20px]'> - </button>
              {count} 
              <button className='text-[20px]' onClick={()=>setCount(count+1)} > + </button> </div>
-            <div className=""> <button className="rounded-xl border px-9 py-4 "> Add To Cart </button> </div>
+              <div className="" onClick={()=>{addToCart(product?._id)}}> 
+              <button className="rounded-xl border px-9 py-4 "> Add To Cart </button> 
+              </div>
           </div>
 
           <hr className='text-[#D9D9D9] my-19 ' />
@@ -141,7 +178,9 @@ const SingleProduct = ({name}) => {
               </div>
               
               <div className="items-end-safe mb-20 my-auto ">
-              <button onClick={()=>{setFavourites(!favourites)}} > {favourites? (<FaHeart size={30} color='red' />) :  (<FaRegHeart size={30} color='red' />) } </button>
+              <button onClick={()=>{setFavourites(!favourites)}} > 
+                {favourites? (<FaHeart  size={30} color='red' />) :  (<FaRegHeart size={30} color='red' onClick={()=>{fav(product?._id)}} />) } 
+                </button>
               </div>
          
             </div>

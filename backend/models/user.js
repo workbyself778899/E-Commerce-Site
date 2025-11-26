@@ -27,13 +27,13 @@ const userSchema = new mongoose.Schema({
     },
     cart:[
           {
-      productId: { type: mongoose.Schema.Types.ObjectId, ref: "Product" },
+      productId: { type: mongoose.Schema.Types.ObjectId, ref: "products" },
       quantity: { type: Number, default: 1 }
     }
     ],
     favourites:[
           {
-      productId: { type: mongoose.Schema.Types.ObjectId, ref: "Product" },
+      productId: { type: mongoose.Schema.Types.ObjectId, ref: "products" },
       selected: {type:Boolean}
     }
     ]

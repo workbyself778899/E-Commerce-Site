@@ -120,37 +120,44 @@ try {
 })
 
 // Add to Cart
-router.post('/add-to-cart/:id',async(req,res)=>{
-    try {
-    const { id } = req.params; // USer ID
+router.post('/add-to-cart/:id', async (req, res) => {
+  try {
+    const userId = req.params.id;   // User ID
     const { productId, quantity } = req.body;
-    
-      const user = await User.findById(id);
-      if(!user) return res.status(404).json({message:"User not found"});
-      
 
-      // Check if product already exit
-      const productIndex =  user.cart.findIndex((items)=>
-    items.productId.equals(productId)
+    if (!productId) {
+      return res.status(400).json({ message: "Product ID is required" });
+    }
+
+    const user = await User.findById(userId);
+    if (!user) return res.status(404).json({ message: "User not found" });
+
+    // Check if product exists in cart
+    const productIndex = user.cart.findIndex((item) =>
+      item.productId.toString() === productId
     );
-    if(productIndex > -1){
-        // quantity increase if product exists
-        user.cart[productIndex].quantity += 1;
-    }
-    else{
-        // push new element
-        user.cart.push({productId, quantity:1});
-    }
+
+      // insert new product
+      user.cart.push({ productId, quantity});
+    
 
     await user.save();
-    res.send({message:"Added to Cart", cart: user.cart});
 
-    } catch (error) {
-        res.status(500).json({ message:"Error in user file",error: error.message });
-    }
-})
+    res.status(200).json({
+      message: "Added to Cart",
+      cart: user.cart
+    });
 
-// Add to Favourites API
+  } catch (error) {
+    res.status(500).json({
+      message: "Error in Add to Cart API",
+      error: error.message
+    });
+  }
+});
+
+
+// Add to Favourites 
 router.post("/add-to-fav/:userId", async (req, res) => {
   try {
     const { userId } = req.params;
@@ -181,6 +188,61 @@ router.post("/add-to-fav/:userId", async (req, res) => {
     res.status(500).json({ error:"Error in user File",error: error.message });
   }
 });
+
+// Get All Favourite Product IDs
+router.get("/get-fav-products/:userId", async (req, res) => {
+  try {
+    const { userId } = req.params;
+
+    const user = await User.findById(userId).populate("favourites.productId");
+
+    if (!user) {
+      return res.status(404).json({ message: "User not found" });
+    }
+
+    res.status(200).json({
+      message: "Favourite products fetched",
+      favourites: user.favourites
+    });
+
+  } catch (error) {
+    res.status(500).json({ message: "Error fetching favourite products", error: error.message });
+  }
+});
+
+// Remove from Favourites 
+router.delete("/remove-from-fav/:userId/:productId", async (req, res) => {
+  try {
+    const { userId, productId } = req.params;
+
+    const user = await User.findById(userId);
+    if (!user) return res.status(404).json({ message: "User not found" });
+
+    // check if product exists
+    const exists = user.favourites.some(
+      (item) => item.productId.toString() === productId
+    );
+
+    if (!exists) {
+      return res.status(404).json({ message: "Product not in favourites" });
+    }
+
+    // remove product from favourites
+    user.favourites = user.favourites.filter(
+      (item) => item.productId.toString() !== productId
+    );
+
+    await user.save();
+
+    res.status(200).json({
+      message: "Removed from favourites",
+      favourites: user.favourites,
+    });
+  } catch (error) {
+    res.status(500).json({ message: "Error in user file", error: error.message });
+  }
+});
+
 
 router.get('/all-user', async(req,res)=>{
   try {
