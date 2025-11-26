@@ -123,7 +123,7 @@ try {
 router.post('/add-to-cart/:id',async(req,res)=>{
     try {
     const { id } = req.params; // USer ID
-    const { productId } = req.body;
+    const { productId, quantity } = req.body;
     
       const user = await User.findById(id);
       if(!user) return res.status(404).json({message:"User not found"});

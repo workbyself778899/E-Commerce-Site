@@ -33,7 +33,8 @@ const userSchema = new mongoose.Schema({
     ],
     favourites:[
           {
-      productId: { type: mongoose.Schema.Types.ObjectId, ref: "Product" }
+      productId: { type: mongoose.Schema.Types.ObjectId, ref: "Product" },
+      selected: {type:Boolean}
     }
     ]
 },

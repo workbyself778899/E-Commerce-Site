@@ -7,12 +7,16 @@ import { FaFacebook } from "react-icons/fa";
 import axios from 'axios';
 import RelatedProduct from '../component/RelatedProduct';
 import Small from '../component/Product/Small';
+import { FaRegHeart } from "react-icons/fa";
+import { FaHeart } from "react-icons/fa6";
 
 const SingleProduct = ({name}) => {  
   const [size, setSize] = useState();
   const [color, setColor] = useState();
   const [select, setSelect] = useState(0)
   const [product, setProduct] = useState(null)
+
+  const [favourites, setFavourites] = useState(false)
 
   const handleSharef =()=>{ 
   const currentUrl = window.location.href; // Get current page URL
@@ -124,7 +128,7 @@ const SingleProduct = ({name}) => {
 
           <hr className='text-[#D9D9D9] my-19 ' />
             {/* simple text  */}
-            <div className="text-[#9F9F9F] flex gap-9 ">
+            <div className="text-[#9F9F9F] flex gap-9  ">
               <div className="">
                   <p>Category</p>
                   <p>Tags</p>
@@ -133,9 +137,12 @@ const SingleProduct = ({name}) => {
               <div className="mb-20">
                 <p> : {product?.type} </p>
                      <p> : Sofa, Hybrid, Table, Chair, Shop </p>
-                     <div className=" flex items-center gap-3"> : <button onClick={handleSharef}  > <FaFacebook size={20} />  </button> </div>
+                     <div className=" flex items-center gap-3"> : <button onClick={handleSharef}  > <FaFacebook color='blue' size={20} />  </button> </div>
               </div>
-           
+              
+              <div className="items-end-safe mb-20 my-auto ">
+              <button onClick={()=>{setFavourites(!favourites)}} > {favourites? (<FaHeart size={30} color='red' />) :  (<FaRegHeart size={30} color='red' />) } </button>
+              </div>
          
             </div>
 
