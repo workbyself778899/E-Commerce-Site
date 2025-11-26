@@ -156,6 +156,44 @@ router.post('/add-to-cart/:id', async (req, res) => {
   }
 });
 
+// Get all the product in cart
+router.get("/get-cart/:userId", async (req, res) => {
+  try {
+    const { userId } = req.params;
+
+    const user = await User.findById(userId).populate("cart.productId");
+
+    if (!user) return res.status(404).json({ message: "User not found" });
+
+    res.status(200).json({
+      message: "Cart fetched",
+      cart: user.cart,
+    });
+  } catch (error) {
+    res.status(500).json({ message: "Error fetching cart", error: error.message });
+  }
+});
+
+// Remove product form cart 
+router.delete("/remove-from-cart/:userId/:productId", async (req, res) => {
+  try {
+    const { userId, productId } = req.params;
+
+    const user = await User.findById(userId);
+    if (!user) return res.status(404).json({ message: "User not found" });
+
+    user.cart = user.cart.filter(
+      (item) => item.productId.toString() !== productId
+    );
+
+    await user.save();
+
+    res.status(200).json({ message: "Item removed from cart", cart: user.cart });
+  } catch (error) {
+    res.status(500).json({ message: "Error removing cart item", error: error.message });
+  }
+});
+
 
 // Add to Favourites 
 router.post("/add-to-fav/:userId", async (req, res) => {

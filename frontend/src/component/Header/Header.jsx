@@ -10,7 +10,7 @@ import Logout from './Logout';
 
 const Header = () => {  
 
-
+const userId = localStorage.getItem('uid');
   const [showCart, setshowCart] = useState(false)
   const [showFav, setShowFav] = useState(false)
   // In home page Header background color change to yellow else white
@@ -48,7 +48,7 @@ const Header = () => {
     </div>
     <div className='flex justify-end '>
     <div className="absolute bg-white top-0">
-      {showCart && (<CardSlideBar showCart={showCart} setshowCart={setshowCart} />)}
+      {showCart && (<CardSlideBar userId={userId} showCart={showCart} setshowCart={setshowCart} />)}
       {showFav && (<Favourites setShowFav={setShowFav} showFav={showFav} />) }
     </div>
       
