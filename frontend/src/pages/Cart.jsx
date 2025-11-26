@@ -62,7 +62,7 @@ const Cart = () => {
                 <th className="py-3 text-[16px] font-medium">Price</th>
                 <th className="py-3 text-[16px] font-medium">Quantity</th>
                 <th className="py-3 text-[16px] font-medium">Subtotal</th>
-                <th className="py-3 text-[16px] font-medium"></th>
+                <th className="py-3 text-[16px] text-red-500 font-medium">Remove</th>
               </tr>
             </thead>
 
@@ -100,11 +100,11 @@ const Cart = () => {
                       )}
                     </td>
 
-                    <td className="text-center">
+                    <td className="text-center  ">
                       <MdDelete
                         size={30}
-                        color="#B88E2F"
-                        className="cursor-pointer"
+                        color="#FBEBB5"
+                        className="cursor-pointer mx-auto"
                         onClick={() => removeItem(item.productId._id)}
                       />
                     </td>
@@ -127,10 +127,14 @@ const Cart = () => {
               Rs. {formatPrice(total)}
             </p>
           </div>
-
+              <p className="text-center mb-4">
+                Your all total price of all the product <br /> is displayed here
+              </p>
           {/* Checkout Button */}
           <div className="flex items-center justify-center mb-10">
-            <Link to="/checkout">
+            <Link 
+              state={{ cartItems: cart }}
+            to="/checkout">
               <button className="px-8 py-3 border-2 rounded-2xl">
                 Check Out
               </button>
