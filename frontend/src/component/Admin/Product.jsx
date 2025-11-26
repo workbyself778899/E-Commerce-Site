@@ -7,6 +7,10 @@ import { toast, ToastContainer } from 'react-toastify';
 const Product = () => { 
   const token = localStorage.getItem('u-token');
   const [preview, setPreview] = useState(null);
+  const [products, setProducts] = useState([])
+  const [editing, setEditing] = useState(null) // product id when editing
+  const [search, setSearch] = useState('')
+  const [filterType, setFilterType] = useState('all')
 
   const {
     register,
@@ -23,18 +27,34 @@ const Product = () => {
       formData.append("price", data.price);
       formData.append("type", data.type);
       formData.append("body", data.body);
-      formData.append("photo", data.photo[0]); // <-- Important for file
+      if (data.photo && data.photo.length > 0) formData.append("photo", data.photo[0]); // optional on edit
 
-      const res = await axios.post("http://localhost:3900/product/add", formData, {
-        headers: {
-          'auth-token': token,
-          "Content-Type": "multipart/form-data"
-        }
-      });
+      let res
+      if (editing) {
+        // edit existing product
+        res = await axios.put(`http://localhost:3900/product/edit/${editing}`, formData, {
+          headers: {
+            'auth-token': token,
+            "Content-Type": "multipart/form-data"
+          }
+        })
+        toast.success(res.data.message || 'Product updated')
+        setEditing(null)
+      } else {
+        // add new
+        res = await axios.post("http://localhost:3900/product/add", formData, {
+          headers: {
+            'auth-token': token,
+            "Content-Type": "multipart/form-data"
+          }
+        });
+        toast.success(res.data.message || 'Product added')
+      }
 
-      toast.success(res.data.message);
       reset();
       setPreview(null);
+      // refresh product list
+      fetchProducts()
 
     } catch (error) {
       console.log(error);
@@ -49,6 +69,50 @@ const Product = () => {
       setPreview(URL.createObjectURL(selectedFile[0]));
     }
   }, [selectedFile]);
+
+  const fetchProducts = async () => {
+    try {
+      const res = await axios.get('http://localhost:3900/product/get-all')
+      // backend returns {message, getAll?} let's inspect res.data
+      // Expect an array in res.data.getProduct or res.data.products or res.data
+      const data = res.data.getProduct || res.data.products || res.data;
+      // if data is an object with message, try res.data
+      if (Array.isArray(data)) setProducts(data)
+      else if (Array.isArray(res.data)) setProducts(res.data)
+    } catch (err) {
+      console.error('Failed to fetch products', err.message)
+    }
+  }
+
+  React.useEffect(() => { fetchProducts() }, [])
+
+  const handleEdit = (product) => {
+    // set form values and go into editing mode
+    setEditing(product._id)
+    reset({ name: product.name, price: product.price, type: product.type, body: product.body })
+    setPreview(product.photo)
+  }
+
+  const handleDelete = async (id) => {
+    if (!window.confirm('Delete this product?')) return
+    try {
+      const res = await axios.delete(`http://localhost:3900/product/delete/${id}`, {
+        headers: { 'auth-token': token }
+      })
+      toast.success(res.data.message || 'Deleted')
+      fetchProducts()
+    } catch (err) {
+      console.error(err)
+      toast.error(err.response?.data?.message || err.message)
+    }
+  }
+
+  const filteredProducts = products.filter(p => {
+    const q = search.trim().toLowerCase()
+    const matchSearch = !q || (p.name && p.name.toLowerCase().includes(q)) || (p._id && p._id.toLowerCase().includes(q))
+    const matchType = filterType === 'all' || (p.type === filterType)
+    return matchSearch && matchType
+  })
 
   return (
     <div className="p-6">
@@ -111,7 +175,7 @@ const Product = () => {
             <input
               type="file"
               accept="image/*"
-              {...register('photo',{required:"Product photo is required"})}
+              {...register('photo', editing ? {} : {required:"Product photo is required"})}
               className="border p-2 rounded-lg cursor-pointer"
             />
             {errors.photo && <p className='text-red-600'>{errors.photo.message}</p>}
@@ -121,15 +185,77 @@ const Product = () => {
           </div>
 
           {/* Submit Button */}
-          <div className="md:col-span-2 flex justify-end">
-            <button
-              type="submit"
-              className="bg-black text-white px-6 py-3 rounded-lg hover:bg-gray-800"
-            >
-              {isSubmitting ? "Adding..." : "Add Product"}
-            </button>
+          <div className="md:col-span-2 flex justify-between items-center">
+            {editing && (
+              <div>
+                <button
+                  type="button"
+                  onClick={() => { setEditing(null); reset(); setPreview(null); }}
+                  className="px-4 py-2 rounded-lg border mr-3"
+                >
+                  Cancel
+                </button>
+              </div>
+            )}
+
+            <div className="ml-auto">
+              <button
+                type="submit"
+                className="bg-black text-white px-6 py-3 rounded-lg hover:bg-gray-800"
+              >
+                {isSubmitting ? (editing ? "Updating..." : "Processing...") : (editing ? "Update Product" : "Add Product")}
+              </button>
+            </div>
           </div>
         </form>
+      </div>
+
+      {/* Products List + Search */}
+      <div className="mt-8">
+        <div className="flex items-center justify-between mb-4">
+          <h2 className="text-xl font-semibold">Products</h2>
+          <div className="flex items-center gap-3">
+            <input
+              type="text"
+              value={search}
+              onChange={(e) => setSearch(e.target.value)}
+              placeholder="Search by name or id..."
+              className="px-3 py-2 border rounded w-64"
+            />
+            <select value={filterType} onChange={(e) => setFilterType(e.target.value)} className="px-3 py-2 border rounded">
+              <option value="all">All types</option>
+              <option value="Hybrid">Hybrid</option>
+              <option value="Table">Table</option>
+              <option value="Chair">Chair</option>
+              <option value="Sofa">Sofa</option>
+            </select>
+            <div className="text-sm text-gray-600">Showing {filteredProducts.length} / {products.length}</div>
+          </div>
+        </div>
+
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+          {filteredProducts.length === 0 ? (
+            <div className="text-gray-600">No products match your search.</div>
+          ) : (
+            filteredProducts.map((p) => (
+              <div key={p._id} className="bg-white p-4 rounded shadow flex items-center justify-between">
+                <div className="flex items-center gap-4">
+                  <img src={p.photo} alt={p.name} className="w-20 h-20 object-contain rounded" />
+                  <div>
+                    <div className="font-medium">{p.name}</div>
+                    <div className="text-sm text-gray-500">Rs. {p.price}</div>
+                    <div className="text-sm text-gray-400">{p.type}</div>
+                    <div className="text-xs text-gray-400">ID: {p._id}</div>
+                  </div>
+                </div>
+                <div className="flex items-center gap-2">
+                  <button onClick={() => handleEdit(p)} className="px-3 py-1 bg-yellow-400 rounded">Edit</button>
+                  <button onClick={() => handleDelete(p._id)} className="px-3 py-1 bg-red-500 text-white rounded">Delete</button>
+                </div>
+              </div>
+            ))
+          )}
+        </div>
       </div>
     </div>
   );
