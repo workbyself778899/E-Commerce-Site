@@ -2,19 +2,24 @@ const orderCreate = require('../controllers/orderCreate');
 const orderDelete = require('../controllers/orderDelete');
 const orderRead = require('../controllers/orderRead');
 const orderReadAll = require('../controllers/orderReadAll');
-const Order = require('../models/product')
+const orderUpdate = require('../controllers/orderUpdate');
 const router = require('express').Router();
+const verifyToken = require('../middleware/verifyToken');
+const verifyAdmin = require('../middleware/verifyAdmin');
 
-// Add order
-router.post('/add',orderCreate)
+// Add order (public)
+router.post('/add', orderCreate)
 
-// Edit order is not allowed
+// Admin: Read all orders
+router.get('/all', verifyToken, verifyAdmin, orderReadAll)
 
-// Delete order
-router.delete('/delete/:id',orderDelete)
+// Read single order (admin)
+router.get('/one/:id', verifyToken, verifyAdmin, orderRead)
 
-// Read order
-router.get('/all',orderReadAll)
-router.get('/one/:id',orderRead)
+// Admin: Update order (status/payment)
+router.put('/update/:id', verifyToken, verifyAdmin, orderUpdate)
+
+// Admin: Delete order
+router.delete('/delete/:id', verifyToken, verifyAdmin, orderDelete)
 
 module.exports = router

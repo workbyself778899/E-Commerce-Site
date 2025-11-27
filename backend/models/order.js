@@ -5,7 +5,8 @@ const orderSchema = new mongoose.Schema(
     userId: {
       type: mongoose.Schema.Types.ObjectId,
       ref: "users",
-      required: true,
+      // optional to support guest checkout
+      required: false,
     },
 
     customer: {

@@ -45,8 +45,9 @@ const Checkout = () => {
     try {
       const orderData = {
         ...data,
-        product: cart,
+        products: cart,
         total_cost: total,
+        userId: userId || undefined,
       };
       console.log("data",data)
       const res = await axios.post("http://localhost:3900/order/add", orderData);
