@@ -8,6 +8,7 @@ import MyAccount from './pages/MyAccount'
 import Home from './pages/Home'
 import Contact from './pages/Contact'
 import Blog from './pages/Blog'
+import SingleBlog from './pages/SingleBlog'
 import AdminBlog from './component/Admin/Blog'
 import { Route, Routes } from 'react-router'
 import Shop from './pages/Shop'
@@ -39,6 +40,7 @@ const App = () => {
           <Route path="/" element={<Home/>}> </Route>
           <Route path='/shop' element={<Shop/>}> </Route>      
           <Route path="/blog"  element={<Blog/>}> </Route>
+          <Route path="/blog/:id" element={<SingleBlog/>}></Route>
           <Route path="/details" element={<Details/>}> </Route>
           <Route path="/myaccount" element={<MyAccount/>}> </Route>
           <Route path="/checkout" element={<Checkout/>}> </Route>
