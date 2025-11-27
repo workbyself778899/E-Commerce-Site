@@ -82,6 +82,7 @@ useEffect(() => {
                       </div> : (" ")
                     }
                   </div>
+
                   {/* If user role, show their orders */}
                   {data?.role === 'user' && (
                     <div className="mt-8 w-full">
@@ -99,8 +100,37 @@ useEffect(() => {
                                 </div>
                                 <div className="flex items-center gap-3">
                                   <span className={`px-2 py-1 rounded text-sm font-medium ${o.order_status === 'Pending' ? 'bg-yellow-100 text-yellow-800' : o.order_status === 'Processing' ? 'bg-blue-100 text-blue-800' : o.order_status === 'Shipped' ? 'bg-indigo-100 text-indigo-800' : o.order_status === 'Completed' ? 'bg-green-100 text-green-800' : 'bg-gray-100 text-gray-800'}`}>{o.order_status}</span>
+                                  
                                   <span className={`px-2 py-1 rounded text-sm font-medium ${o.payment_status === 'Paid' ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800'}`}>{o.payment_status}</span>
                                 </div>
+                              </div>
+                              {/* Products in this order */}
+                              <div className="mt-3 border-t pt-3">
+                                {o.products && o.products.length > 0 ? (
+                                  <div className="space-y-2">
+                                    {o.products.map((p) => {
+                                      const img = p.photo || (p.productId && p.productId.photo) || ''
+                                      return (
+                                        <div key={p.productId || p._id} className="flex justify-between items-center text-sm">
+                                          <div className="flex items-center gap-3">
+                                            {img ? (
+                                              <img src={img} alt={p.name || 'product'} className="w-12 h-12 object-contain rounded" />
+                                            ) : (
+                                              <div className="w-12 h-12 bg-gray-100 rounded" />
+                                            )}
+                                            <div>
+                                              <div className="font-medium">{p.name || 'Product'}</div>
+                                              <div className="text-gray-600">Qty: {p.quantity || 1}</div>
+                                            </div>
+                                          </div>
+                                          <div className="text-gray-700">Rs. {(Number(p.price) * Number(p.quantity || 1)).toLocaleString('en', { minimumFractionDigits: 2 })}</div>
+                                        </div>
+                                      )
+                                    })}
+                                  </div>
+                                ) : (
+                                  <div className="text-sm text-gray-600">No products listed for this order.</div>
+                                )}
                               </div>
                             </div>
                           ))}

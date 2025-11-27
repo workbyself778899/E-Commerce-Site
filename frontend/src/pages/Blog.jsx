@@ -44,10 +44,10 @@ const Blog = () => {
         </div>
       </div>
 
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+      <div className="flex  flex-col ">
         {pageItems.map(b => (
-          <div key={b._id} className="bg-white rounded shadow p-4">
-            {b.image && <img src={b.image} alt={b.title} className="w-full h-40 object-cover rounded mb-3" />}
+          <div key={b._id} className="bg-white rounded shadow my-19 p-4">
+            {b.image && <img src={b.image} alt={b.title} className="w-full h-full object-contain rounded mb-3" />}
             <div className="text-lg font-semibold mb-1">{b.title}</div>
             <div className="text-sm text-gray-600 mb-2">{b.categories}</div>
             <div className="text-sm text-gray-700 mb-3">{b.contain?.slice(0,120)}{b.contain && b.contain.length > 120 ? '...' : ''}</div>

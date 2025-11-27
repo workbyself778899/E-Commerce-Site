@@ -3,7 +3,8 @@ import SecondHeader from "../component/Header/SecondHeader";
 import { useForm } from "react-hook-form";
 import axios from "axios";
 import { FaCircle } from "react-icons/fa";
-import { useLocation } from "react-router";
+import { useLocation, useNavigate } from "react-router-dom";
+import { toast, ToastContainer } from "react-toastify";
 
 const Checkout = () => {
   const [cart, setCart] = useState([]);
@@ -11,7 +12,7 @@ const Checkout = () => {
   const { cartItems } = location.state || { cartItems: [] };
   console.log(cartItems)
   const userId = localStorage.getItem("uid");
-
+  const nav= useNavigate();
   const formatCurrency = (num) => num.toLocaleString("en-US", {minimumFractionDigits: 2, maximumFractionDigits: 2});
 
   // Fetch cart
@@ -38,6 +39,7 @@ const Checkout = () => {
     register,
     handleSubmit,
     formState: { errors },
+    reset,
   } = useForm();
 
   // Submit order
@@ -51,22 +53,22 @@ const Checkout = () => {
       };
       console.log("data",data)
       const res = await axios.post("http://localhost:3900/order/add", orderData);
-      alert("Order placed successfully!");
+      toast.success("Order placed successfully!");
+      reset();
+      nav('/')
       console.log(res.data);
     } catch (err) {
-      alert("Failed to place order");
+      toast.error("Failed to place order");
       console.log(err);
     }
   };
 
-  useEffect(() => {
 
-  }, [])
 
   return (
     <div>
       <SecondHeader text="Checkout" />
-
+      <ToastContainer />
       <div className="flex justify-around my-10">
         {/* LEFT SIDE — Billing Details */}
         <div className="w-[608px] p-2 ">
@@ -221,7 +223,7 @@ const Checkout = () => {
               </div>
 
               <div className="flex gap-3 mb-6">
-                <input type="radio" value="cod" {...register("payment")} />
+                <input type="radio" value="cod" {...register("payment",)} />
                 <label>Cash On Delivery</label>
               </div>
 

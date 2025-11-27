@@ -59,6 +59,20 @@ const formattedDate = (dateString) => {
       </div>
        <HeroTable />
       <TopPicks />
+
+    {/* Simple banner */}
+    <div className="bg-[#FFF9E5] h-[639px]  flex items-center justify-between  ">
+      <div className="">
+        <img src="https://ik.imagekit.io/zx6p823zj/Asgaard_sofa_2__wf-W6Qf_.png" className='h-[600px] object-contain ' alt="" />
+      </div>
+      <div className="mr-19 flex flex-col justify-center items-center ">
+        <p className="font-medium text-[24px] text-center ">New Arrivals</p>
+        <p className="font-bold text-[48px] text-center ">Asgaard sofa</p>
+        <Link to='/shop'> <button className='px-9 py-3 mt-10 border' > Order Now </button> </Link>
+      </div>
+    </div>
+
+
      {/* Blogs preview section: show first 3 blogs and a View More button */}
       <div className=" mx-auto my-18 px-4">
         <div className="flex flex-col items-center  justify-center mx-auto text-[36px] font-medium  mb-6">
