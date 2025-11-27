@@ -26,6 +26,9 @@ app.use('/order',order)
 
 const contact = require('./routes/contact')
 app.use('/contact',contact)
+// Featured routes (Top picks / Here table)
+const featured = require('./routes/featured')
+app.use('/featured', featured)
     
 app.get('/',(req,res)=>{
     res.send("Show the code")

@@ -27,6 +27,7 @@ import Dashboard from './component/Admin/Dashboard'
 import Order from './component/Admin/Order'
 import Product from './component/Admin/Product'
 import ContactList from './component/Admin/ContactList'
+import FeaturedAdmin from './component/Admin/Featured'
 
 
 const App = () => {   
@@ -55,6 +56,7 @@ const App = () => {
             <Route path='order' element={<Order/>}></Route>
             <Route path='product' element={<Product/>}></Route>
             <Route path='contact' element={<ContactList/>}></Route>
+            <Route path='featured' element={<FeaturedAdmin/>}></Route>
             <Route path='blog' element={<AdminBlog/>}></Route>
             </Route>
           

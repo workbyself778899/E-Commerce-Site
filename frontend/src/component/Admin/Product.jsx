@@ -107,6 +107,16 @@ const Product = () => {
     }
   }
 
+  const addToFeatured = async (section, productId) => {
+    try {
+      const res = await axios.post('http://localhost:3900/featured/add', { section, productId }, { headers: { 'auth-token': token } })
+      toast.success(res.data.message || 'Added to featured')
+    } catch (err) {
+      console.error('Failed to add to featured', err)
+      toast.error(err.response?.data?.message || 'Failed to add to featured')
+    }
+  }
+
   const filteredProducts = products.filter(p => {
     const q = search.trim().toLowerCase()
     const matchSearch = !q || (p.name && p.name.toLowerCase().includes(q)) || (p._id && p._id.toLowerCase().includes(q))
@@ -250,6 +260,8 @@ const Product = () => {
                 </div>
                 <div className="flex items-center gap-2">
                   <button onClick={() => handleEdit(p)} className="px-3 py-1 bg-yellow-400 rounded">Edit</button>
+                  <button onClick={() => addToFeatured('topPicks', p._id)} className="px-3 py-1 bg-blue-400 text-white rounded">Add TopPick</button>
+                  <button onClick={() => addToFeatured('hereTable', p._id)} className="px-3 py-1 bg-indigo-400 text-white rounded">Add HereTable</button>
                   <button onClick={() => handleDelete(p._id)} className="px-3 py-1 bg-red-500 text-white rounded">Delete</button>
                 </div>
               </div>

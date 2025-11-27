@@ -7,6 +7,8 @@ import { MdAccessTime } from "react-icons/md";
 import { MdOutlineDateRange } from "react-icons/md";
 import Insta from '../component/Footers/Insta'
 import RelatedProduct from '../component/RelatedProduct'
+import TopPicks from '../component/TopPicks'
+import HeroTable from '../component/HeroTable'
 const Home = () => {   
   const [blogs, setBlogs] = useState([])
 
@@ -55,8 +57,8 @@ const formattedDate = (dateString) => {
           <img src="/chair 1.png" className='h-[700px]  ' alt="No image" />
         </div>
       </div>
-      
-
+       <HeroTable />
+      <TopPicks />
      {/* Blogs preview section: show first 3 blogs and a View More button */}
       <div className=" mx-auto my-18 px-4">
         <div className="flex flex-col items-center  justify-center mx-auto text-[36px] font-medium  mb-6">
@@ -87,6 +89,9 @@ const formattedDate = (dateString) => {
       </div>
 
       <Insta></Insta>
+
+
+     
     </>
   )
 }

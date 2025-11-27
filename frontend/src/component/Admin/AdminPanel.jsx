@@ -52,6 +52,12 @@ const AdminPanel = () => {
             {open && "Products"}
           </li>
          </Link>
+         <Link to="/admin-panel/featured">
+          <li className="flex items-center gap-3 p-3 rounded hover:bg-gray-100 cursor-pointer">
+            <FiUsers size={22} />
+            {open && "Featured"}
+          </li>
+         </Link>
 
          <Link to="/admin-panel/blog">
           <li className="flex items-center gap-3 p-3 rounded hover:bg-gray-100 cursor-pointer">
