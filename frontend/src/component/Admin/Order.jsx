@@ -44,6 +44,18 @@ const Order = () => {
     }
   }
 
+  const handleTogglePayment = async (id, current) => {
+    try {
+      const next = current === 'Paid' ? 'Unpaid' : 'Paid'
+      const res = await axios.put(`http://localhost:3900/order/update/${id}`, { payment_status: next }, { headers: { 'auth-token': token } })
+      toast.success(res.data.message || 'Payment status updated')
+      fetchOrders()
+    } catch (err) {
+      console.error(err)
+      toast.error('Failed to update payment status')
+    }
+  }
+
   const filtered = orders.filter(o => {
     const q = query.trim().toLowerCase()
     if (!q) return true
@@ -66,18 +78,23 @@ const Order = () => {
       <div className="space-y-3">
         {filtered.length === 0 ? <div className="text-gray-600">No orders found</div> : (
           filtered.map(o => (
-            <div key={o._id} className="bg-white p-4 rounded shadow flex justify-between">
+            <div key={o._id} className="bg-white p-4 rounded shadow flex justify-between items-center">
               <div>
                 <div className="font-medium">Order #{o._id}</div>
                 <div className="text-sm text-gray-600">{o.customer?.fname} {o.customer?.lname} — {o.customer?.email}</div>
                 <div className="text-sm text-gray-600">Total: Rs. {o.total_cost}</div>
-                <div className="text-sm text-gray-600">Status: {o.order_status} / {o.payment_status}</div>
+                <div className="flex items-center gap-2 mt-2">
+                  <span className={`px-2 py-1 rounded text-sm font-medium ${o.order_status === 'Pending' ? 'bg-yellow-100 text-yellow-800' : o.order_status === 'Processing' ? 'bg-blue-100 text-blue-800' : o.order_status === 'Shipped' ? 'bg-indigo-100 text-indigo-800' : o.order_status === 'Completed' ? 'bg-green-100 text-green-800' : 'bg-gray-100 text-gray-800'}`}>{o.order_status}</span>
+                  <button onClick={() => handleTogglePayment(o._id, o.payment_status)} className={`px-2 py-1 rounded text-sm font-medium ${o.payment_status === 'Paid' ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800'}`}>{o.payment_status}</button>
+                </div>
               </div>
               <div className="flex flex-col gap-2">
                 <button onClick={() => setSelected(o)} className="px-3 py-1 bg-blue-400 text-white rounded">View</button>
-                <button onClick={() => handleUpdateStatus(o._id, 'Processing')} className="px-3 py-1 bg-yellow-300 rounded">Processing</button>
-                <button onClick={() => handleUpdateStatus(o._id, 'Shipped')} className="px-3 py-1 bg-indigo-400 text-white rounded">Shipped</button>
-                <button onClick={() => handleUpdateStatus(o._id, 'Completed')} className="px-3 py-1 bg-green-500 text-white rounded">Complete</button>
+                <div className="flex gap-2">
+                  <button onClick={() => handleUpdateStatus(o._id, 'Processing')} className="px-3 py-1 bg-yellow-300 rounded">Processing</button>
+                  <button onClick={() => handleUpdateStatus(o._id, 'Shipped')} className="px-3 py-1 bg-indigo-400 text-white rounded">Shipped</button>
+                  <button onClick={() => handleUpdateStatus(o._id, 'Completed')} className="px-3 py-1 bg-green-500 text-white rounded">Complete</button>
+                </div>
                 <button onClick={() => handleDelete(o._id)} className="px-3 py-1 bg-red-500 text-white rounded">Delete</button>
               </div>
             </div>

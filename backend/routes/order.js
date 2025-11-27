@@ -10,11 +10,16 @@ const verifyAdmin = require('../middleware/verifyAdmin');
 // Add order (public)
 router.post('/add', orderCreate)
 
+
 // Admin: Read all orders
 router.get('/all', verifyToken, verifyAdmin, orderReadAll)
 
 // Read single order (admin)
 router.get('/one/:id', verifyToken, verifyAdmin, orderRead)
+
+// Get orders for authenticated user
+const orderReadByUser = require('../controllers/orderReadByUser')
+router.get('/user', verifyToken, orderReadByUser)
 
 // Admin: Update order (status/payment)
 router.put('/update/:id', verifyToken, verifyAdmin, orderUpdate)

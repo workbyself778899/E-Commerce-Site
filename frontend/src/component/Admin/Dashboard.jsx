@@ -22,7 +22,10 @@ const Dashboard = () => {
 
     // count total Order 
     const Order = async()=>{
-        const res = await axios.get("http://localhost:3900/order/all")
+        const res = await axios.get("http://localhost:3900/order/all",{
+          headers:{ 'auth-token': localStorage.getItem('u-token')}
+        })
+        console.log("order",res)
       setCountOrder(res.data.getOrder.length)
     }
     

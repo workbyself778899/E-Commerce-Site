@@ -20,6 +20,7 @@ const MyAccount = () => {
 const id = localStorage.getItem('uid'); // user id
 console.log(id)
 const [data, setData] = useState(null);
+const [orders, setOrders] = useState([])
 
 useEffect(()=>{
   const getUser = async()=>{  
@@ -33,6 +34,20 @@ useEffect(()=>{
           }
   if(id) getUser();
 },[id]);
+
+useEffect(() => {
+  const fetchOrders = async () => {
+    try {
+      const token = localStorage.getItem('u-token')
+      const res = await axios.get('http://localhost:3900/order/user', { headers: { 'auth-token': token } })
+      const data = res.data.orders || res.data.getOrder || []
+      if (Array.isArray(data)) setOrders(data)
+    } catch (err) {
+      console.error('Failed to fetch user orders', err.message)
+    }
+  }
+  if (id) fetchOrders()
+}, [id])
 
   return (
    <>
@@ -67,6 +82,32 @@ useEffect(()=>{
                       </div> : (" ")
                     }
                   </div>
+                  {/* If user role, show their orders */}
+                  {data?.role === 'user' && (
+                    <div className="mt-8 w-full">
+                      <h3 className="text-2xl font-semibold mb-4">Your Orders</h3>
+                      {orders.length === 0 ? (
+                        <div className="text-gray-600">You have no orders yet.</div>
+                      ) : (
+                        <div className="space-y-3">
+                          {orders.map(o => (
+                            <div key={o._id} className="bg-white p-4 rounded shadow">
+                              <div className="flex items-center justify-between">
+                                <div>
+                                  <div className="font-medium">Order #{o._id}</div>
+                                  <div className="text-sm text-gray-600">Total: Rs. {o.total_cost}</div>
+                                </div>
+                                <div className="flex items-center gap-3">
+                                  <span className={`px-2 py-1 rounded text-sm font-medium ${o.order_status === 'Pending' ? 'bg-yellow-100 text-yellow-800' : o.order_status === 'Processing' ? 'bg-blue-100 text-blue-800' : o.order_status === 'Shipped' ? 'bg-indigo-100 text-indigo-800' : o.order_status === 'Completed' ? 'bg-green-100 text-green-800' : 'bg-gray-100 text-gray-800'}`}>{o.order_status}</span>
+                                  <span className={`px-2 py-1 rounded text-sm font-medium ${o.payment_status === 'Paid' ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800'}`}>{o.payment_status}</span>
+                                </div>
+                              </div>
+                            </div>
+                          ))}
+                        </div>
+                      )}
+                    </div>
+                  )}
                 </div>
 
                
