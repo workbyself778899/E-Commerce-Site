@@ -8,11 +8,12 @@ import MyAccount from './pages/MyAccount'
 import Home from './pages/Home'
 import Contact from './pages/Contact'
 import Blog from './pages/Blog'
+import AdminBlog from './component/Admin/Blog'
 import { Route, Routes } from 'react-router'
 import Shop from './pages/Shop'
 import Details from './pages/Details'
 import Cart from './pages/Cart'
-import Checkout from './pages/Chekout'
+import Checkout from './pages/Checkout'
 import NotFound from './pages/NotFound'
 import MainLayout from './pages/MainLayout'
 import About from './pages/About'
@@ -52,6 +53,7 @@ const App = () => {
             <Route path='order' element={<Order/>}></Route>
             <Route path='product' element={<Product/>}></Route>
             <Route path='contact' element={<ContactList/>}></Route>
+            <Route path='blog' element={<AdminBlog/>}></Route>
             </Route>
           
       </Route>

@@ -1,233 +1,243 @@
-import React, { useEffect, useState } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
-import { IoIosArrowForward } from 'react-icons/io';
-import { useForm } from 'react-hook-form';
-import api from '../utils/api.js';
+import React, { useEffect, useState } from "react";
+import SecondHeader from "../component/Header/SecondHeader";
+import { useForm } from "react-hook-form";
+import axios from "axios";
+import { FaCircle } from "react-icons/fa";
+import { useLocation } from "react-router";
 
 const Checkout = () => {
-  const navigate = useNavigate();
-  const [items, setItems] = useState([]);
-  const [loading, setLoading] = useState(false);
+  const [cart, setCart] = useState([]);
+  const location = useLocation();
+  const { cartItems } = location.state || { cartItems: [] };
+  console.log(cartItems)
+  const userId = localStorage.getItem("uid");
 
-  const { register, handleSubmit, formState: { errors }, reset } = useForm();
+  const formatCurrency = (num) => num.toLocaleString("en-US", {minimumFractionDigits: 2, maximumFractionDigits: 2});
 
-  // Load cart from localStorage
-  useEffect(() => {
-    const cart = JSON.parse(localStorage.getItem('cart') || '[]');
-    setItems(cart);
-  }, []);
-
-  const total = items.reduce((sum, item) => sum + (item.price || 0) * (item.quantity || 1), 0);
-
-  const onSubmit = async (data) => {
-    if (items.length === 0) {
-      alert('Your cart is empty');
-      navigate('/cart');
-      return;
-    }
-
-    setLoading(true);
+  // Fetch cart
+  const getCart = async (userId) => {
     try {
-      const payload = {
-        ...data,
-        product: items,
-        total_cost: total
-      };
-      const res = await api.post('/add', payload);
-      alert(res.data.message || 'Order placed successfully!');
-      localStorage.setItem('cart', JSON.stringify([]));
-      setItems([]);
-      reset();
-      navigate('/shop');
+      const res = await axios.get(`http://localhost:3900/user/get-cart/${userId}`);
+      setCart(res.data.cart || []);
     } catch (err) {
-      console.error(err);
-      alert('Failed to place order: ' + (err.response?.data?.message || err.message));
-    } finally {
-      setLoading(false);
+      console.log("Fetch Cart Error:", err.message);
     }
   };
 
-  const formatPrice = (price) => new Intl.NumberFormat('en-US').format(price);
+  useEffect(() => {
+    getCart(userId);
+  }, []);
+
+  // Calculate total
+  const total = cart.reduce(
+    (sum, item) => sum + Number(item.productId.price) * Number(item.quantity),
+    0
+  );
+
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm();
+
+  // Submit order
+  const onSubmit = async (data) => {
+    try {
+      const orderData = {
+        ...data,
+        product: cart,
+        total_cost: total,
+      };
+      console.log("data",data)
+      const res = await axios.post("http://localhost:3900/order/add", orderData);
+      alert("Order placed successfully!");
+      console.log(res.data);
+    } catch (err) {
+      alert("Failed to place order");
+      console.log(err);
+    }
+  };
+
+  useEffect(() => {
+
+  }, [])
 
   return (
-    <div className="container mx-auto px-4 py-8">
-      {/* Breadcrumb */}
-      <div className="flex items-center gap-2 mb-9">
-        <Link to='/' className="text-[#9F9F9F]">Home</Link>
-        <IoIosArrowForward />
-        <Link to='/cart' className="text-[#9F9F9F]">Cart</Link>
-        <IoIosArrowForward />
-        <div className='px-4 border-l-2 border-[#9F9F9F]'>Checkout</div>
-      </div>
+    <div>
+      <SecondHeader text="Checkout" />
 
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-        {/* Billing Form */}
-        <div className="lg:col-span-2">
-          <h2 className="text-3xl font-semibold mb-8">Billing Details</h2>
-          <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
-            <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
-              <div>
-                <label className="block text-sm font-medium mb-2">First Name *</label>
-                <input
-                  type="text"
-                  {...register('fname', { required: 'First Name is required' })}
-                  className="w-full border border-gray-400 p-3 rounded focus:outline-none focus:ring-2 focus:ring-yellow-400"
-                />
-                {errors.fname && <p className="text-red-500 text-sm mt-1">{errors.fname.message}</p>}
+      <div className="flex justify-around my-10">
+        {/* LEFT SIDE — Billing Details */}
+        <div className="w-[608px] p-2 ">
+
+
+          <form className="flex items-start gap-20 justify-center " onSubmit={handleSubmit(onSubmit)}>
+            {/* Left Part  */}
+            <div className="">
+              <h2 className="text-[36px] font-semibold mb-10">Billing Details</h2>
+              {/* First & Last Name */}
+              <div className="flex gap-6 mb-10">
+                <div className="flex flex-col">
+                  <label className="font-medium pb-4">First Name</label>
+                  <input
+                    {...register("fname", { required: true })}
+                    className="border px-3 h-[75px] rounded-lg"
+                  />
+                  {errors.fname && <p className="text-red-500">Required</p>}
+                </div>
+
+                <div className="flex flex-col">
+                  <label className="font-medium pb-4">Last Name</label>
+                  <input
+                    {...register("lname", { required: true })}
+                    className="border px-3 h-[75px] rounded-lg"
+                  />
+                  {errors.lname && <p className="text-red-500">Required</p>}
+                </div>
               </div>
-              <div>
-                <label className="block text-sm font-medium mb-2">Last Name *</label>
+
+              {/* Company */}
+              <div className="flex flex-col mb-10">
+                <label className="font-medium pb-4">Company Name (Optional)</label>
+                <input {...register("company_name")} className="border px-3 h-[75px] rounded-lg" />
+              </div>
+
+              {/* Country */}
+              <div className="flex flex-col mb-10">
+                <label className="font-medium pb-4">Country / Region</label>
+                <select {...register("country", { required: true })} className="border px-3 h-[75px] rounded-lg">
+                  <option value="Nepal">Nepal</option>
+                  <option value="India">India</option>
+                  <option value="China">China</option>
+                </select>
+              </div>
+
+              {/* Address */}
+              <div className="flex flex-col mb-10">
+                <label className="font-medium pb-4">Street Address</label>
+                <input {...register("address", { required: true })} className="border px-3 h-[75px] rounded-lg" />
+              </div>
+
+              {/* City */}
+              <div className="flex flex-col mb-10">
+                <label className="font-medium pb-4">Town / City</label>
+                <input {...register("city", { required: true })} className="border px-3 h-[75px] rounded-lg" />
+              </div>
+
+              {/* Province */}
+              <div className="flex flex-col mb-10">
+                <label className="font-medium pb-4">Province</label>
+                <select {...register("province", { required: true })} className="border px-3 h-[75px] rounded-lg">
+                  <option value="Bagmati">Bagmati</option>
+                  <option value="Gandaki">Gandaki</option>
+                  <option value="Lumbini">Lumbini</option>
+                </select>
+              </div>
+
+              {/* Zip */}
+              <div className="flex flex-col mb-10">
+                <label className="font-medium pb-4">Zip Code</label>
+                <input {...register("zip_code")} className="border px-3 h-[75px] rounded-lg" />
+              </div>
+
+              {/* Phone */}
+              <div className="flex flex-col mb-10">
+                <label className="font-medium pb-4">Phone</label>
                 <input
-                  type="text"
-                  {...register('lname', { required: 'Last Name is required' })}
-                  className="w-full border border-gray-400 p-3 rounded focus:outline-none focus:ring-2 focus:ring-yellow-400"
+                  {...register("phone", { required: true })}
+                  className="border px-3 h-[75px] rounded-lg"
                 />
-                {errors.lname && <p className="text-red-500 text-sm mt-1">{errors.lname.message}</p>}
+              </div>
+
+              {/* Email */}
+              <div className="flex flex-col mb-10">
+                <label className="font-medium pb-4">Email Address</label>
+                <input
+                  {...register("email", { required: true })}
+                  className="border px-3 h-[75px] rounded-lg"
+                />
+              </div>
+
+              {/* Additional Info */}
+              <div className="flex flex-col mb-10">
+                <label className="font-medium pb-4">Additional Information</label>
+                <input
+                  {...register("details")}
+                  className="border px-3 h-[75px] rounded-lg"
+                  placeholder="Optional"
+                />
               </div>
             </div>
+            {/* RIGHT SIDE — Order Summary */}
+            <div className="w-[533px]">
 
-            <div>
-              <label className="block text-sm font-medium mb-2">Company Name</label>
-              <input
-                type="text"
-                {...register('company_name')}
-                className="w-full border border-gray-400 p-3 rounded focus:outline-none focus:ring-2 focus:ring-yellow-400"
-              />
-            </div>
+              <h2 className="text-[28px] font-semibold mb-5">Order Summary</h2>
 
-            <div>
-              <label className="block text-sm font-medium mb-2">Country / Region *</label>
-              <input
-                type="text"
-                {...register('country', { required: 'Country is required' })}
-                className="w-full border border-gray-400 p-3 rounded focus:outline-none focus:ring-2 focus:ring-yellow-400"
-              />
-              {errors.country && <p className="text-red-500 text-sm mt-1">{errors.country.message}</p>}
-            </div>
+              <table className="w-[533px] border-collapse">
+                <thead>
+                  <tr className="">
+                    <th className="text-left py-3 font-medium text-[24px]">Product</th>
+                    <th className="text-right py-3 font-medium text-[24px]">Subtotal</th>
+                  </tr>
+                </thead>
 
-            <div>
-              <label className="block text-sm font-medium mb-2">Street Address *</label>
-              <input
-                type="text"
-                {...register('address', { required: 'Address is required' })}
-                className="w-full border border-gray-400 p-3 rounded focus:outline-none focus:ring-2 focus:ring-yellow-400"
-              />
-              {errors.address && <p className="text-red-500 text-sm mt-1">{errors.address.message}</p>}
-            </div>
+                <tbody>
+                  {cart.map((item) => (
+                    <tr key={item.productId._id} className="">
+                      <td className="py-3">
+                        {item.productId.name}
+                        <span className="text-gray-600"> × {item.quantity}</span>
+                      </td>
+                      <td className="text-right py-3">
+                        Rs. {formatCurrency(item.productId.price * item.quantity)}
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
 
-            <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
-              <div>
-                <label className="block text-sm font-medium mb-2">Town / City *</label>
-                <input
-                  type="text"
-                  {...register('city', { required: 'City is required' })}
-                  className="w-full border border-gray-400 p-3 rounded focus:outline-none focus:ring-2 focus:ring-yellow-400"
-                />
-                {errors.city && <p className="text-red-500 text-sm mt-1">{errors.city.message}</p>}
+              {/* Total */}
+              <div className="flex justify-between items-center mt-6 ">
+                <span className="font-normal text-[16px]" >Total</span>
+                <span className="text-[#B88E2F] text-[24px] font-bold ">Rs. {formatCurrency(total)}</span>
               </div>
-              <div>
-                <label className="block text-sm font-medium mb-2">Province *</label>
-                <input
-                  type="text"
-                  {...register('province', { required: 'Province is required' })}
-                  className="w-full border border-gray-400 p-3 rounded focus:outline-none focus:ring-2 focus:ring-yellow-400"
-                />
-                {errors.province && <p className="text-red-500 text-sm mt-1">{errors.province.message}</p>}
+
+              <hr className="my-6" />
+
+              {/* Payment Method */}
+              <div className="my-6">
+                <p className="flex items-center gap-3">
+                  <FaCircle /> Direct Bank Transfer (Not available)
+                </p>
+                <p className="text-[#9F9F9F] mt-4">
+                  Make your payment directly into our bank account...
+                </p>
               </div>
+
+              <div className="flex gap-3 my-3">
+                <input type="radio" value="bank" {...register("payment")} />
+                <label>Direct Bank Transfer</label>
+              </div>
+
+              <div className="flex gap-3 mb-6">
+                <input type="radio" value="cod" {...register("payment")} />
+                <label>Cash On Delivery</label>
+              </div>
+
+              {/* Place Order */}
+              <div className="flex justify-center py-6">
+                <button
+                  type="submit"
+                  className="text-[20px] px-18 py-2 border rounded-2xl hover:bg-[#55f5909e]"
+                >
+                  Place order
+                </button>
+              </div>
+
             </div>
 
-            <div>
-              <label className="block text-sm font-medium mb-2">ZIP Code</label>
-              <input
-                type="text"
-                {...register('zip_code')}
-                className="w-full border border-gray-400 p-3 rounded focus:outline-none focus:ring-2 focus:ring-yellow-400"
-              />
-            </div>
 
-            <div>
-              <label className="block text-sm font-medium mb-2">Phone *</label>
-              <input
-                type="tel"
-                {...register('phone', { required: 'Phone is required' })}
-                className="w-full border border-gray-400 p-3 rounded focus:outline-none focus:ring-2 focus:ring-yellow-400"
-              />
-              {errors.phone && <p className="text-red-500 text-sm mt-1">{errors.phone.message}</p>}
-            </div>
-
-            <div>
-              <label className="block text-sm font-medium mb-2">Email Address *</label>
-              <input
-                type="email"
-                {...register('email', { required: 'Email is required' })}
-                className="w-full border border-gray-400 p-3 rounded focus:outline-none focus:ring-2 focus:ring-yellow-400"
-              />
-              {errors.email && <p className="text-red-500 text-sm mt-1">{errors.email.message}</p>}
-            </div>
-
-            <div>
-              <label className="block text-sm font-medium mb-2">Additional Information</label>
-              <textarea
-                {...register('details')}
-                placeholder="Additional Details"
-                className="w-full border border-gray-400 p-3 rounded h-24 focus:outline-none focus:ring-2 focus:ring-yellow-400"
-              />
-            </div>
-
-            <button
-              type="submit"
-              disabled={loading}
-              className="w-full bg-yellow-400 text-black py-3 rounded font-bold text-lg hover:bg-yellow-500 disabled:bg-gray-300 transition"
-            >
-              {loading ? 'Placing Order...' : 'Place Order'}
-            </button>
           </form>
-        </div>
-
-        {/* Order Summary Sidebar */}
-        <div>
-          <h3 className="text-2xl font-semibold mb-6">Order Summary</h3>
-          <div className="bg-gray-50 p-4 rounded mb-6 max-h-96 overflow-y-auto">
-            <h4 className="font-semibold mb-3 text-sm">Items in Cart:</h4>
-            {items.length === 0 ? (
-              <div className="text-sm text-gray-500">No items in cart</div>
-            ) : (
-              <div className="space-y-3">
-                {items.map((it, idx) => (
-                  <div key={idx} className="flex justify-between items-start text-sm border-b pb-2">
-                    <div>
-                      <div className="font-medium">{it.name}</div>
-                      <div className="text-xs text-gray-600">Qty: {it.quantity}</div>
-                    </div>
-                    <div className="text-right">
-                      <div className="font-medium">Rs. {formatPrice(it.price * it.quantity)}</div>
-                    </div>
-                  </div>
-                ))}
-              </div>
-            )}
-          </div>
-
-          <div className="bg-[#FFF9E5] p-6 rounded">
-            <div className="space-y-3 mb-4">
-              <div className="flex justify-between text-sm">
-                <span>Subtotal:</span>
-                <span className="font-medium">Rs. {formatPrice(total)}</span>
-              </div>
-              <div className="flex justify-between text-sm">
-                <span>Shipping:</span>
-                <span className="font-medium">Rs. 0</span>
-              </div>
-              <hr className="border-gray-300" />
-              <div className="flex justify-between text-lg font-bold text-[#B88E2F]">
-                <span>Total:</span>
-                <span>Rs. {formatPrice(total)}</span>
-              </div>
-            </div>
-            <Link to='/cart' className="block text-center text-sm text-blue-600 hover:underline">
-              ← Back to Cart
-            </Link>
-          </div>
         </div>
       </div>
     </div>

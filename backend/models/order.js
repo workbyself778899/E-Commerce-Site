@@ -1,56 +1,55 @@
-const mongoose= require("mongoose");
-const orderSchema = new mongoose.Schema({
-    fname:{
-        type:String,
-        required:[true,"first Name is required"]
-    },
-    lname:{
-        type:String,
-        required:[true,"Last Name is required"]
-    },
-     country:{
-        type:String,
-        required:[true,"Country is required"]
-    },
-     city:{
-        type:String,
-        required:[true,"City Name is required"]
-    },
-     province:{
-        type:String,
-        required:[true,"Province Name is required"]
-    },
-     address:{
-        type:String,
-        required:[true,"Address is required"]
-    },
-     phone:{
-        type:Number,
-        required:[true,"Phone number is required"]
-    }, 
-    email:{
-        type:String,
-        required:[true,"Email address is required"]
-    },
-     product:{
-        type:Object,
-        required:[true,"Atleast one product is required"]
-    },
-    company_name:{
-        type:String
-    },
-    details:{
-        type:String
-    },
-     zip_code:{
-        type:String
-    },
-    total_cost:{
-        type:Number,
-        required:[true,"Prices of product is required"]
-    }
+const mongoose = require("mongoose");
 
+const orderSchema = new mongoose.Schema(
+  {
+    userId: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "users",
+      required: true,
+    },
 
-},{timestamps:true})
+    customer: {
+      fname: { type: String, required: true },
+      lname: { type: String, required: true },
+      email: { type: String, required: true },
+      phone: { type: Number, required: true },
+      country: { type: String, required: true },
+      city: { type: String, required: true },
+      province: { type: String, required: true },
+      address: { type: String, required: true },
+      zip_code: { type: String },
+      company_name: { type: String },
+      details: { type: String }, // User message / notes
+    },
 
-module.exports = mongoose.model('orders',orderSchema)
+    products: [
+      {
+        productId: { type: mongoose.Schema.Types.ObjectId, ref: "products" },
+        name: String,
+        price: Number,
+        quantity: Number,
+        photo: String,
+      },
+    ],
+
+    total_cost: {
+      type: Number,
+      required: true,
+    },
+
+    order_status: {
+      type: String,
+      enum: ["Pending", "Processing", "Shipped", "Completed", "Cancelled"],
+      default: "Pending",
+    },
+
+    payment_status: {
+      type: String,
+      enum: ["Unpaid", "Paid"],
+      default: "Unpaid",
+    },
+  },
+  { timestamps: true }
+);
+
+module.exports = mongoose.model("orders", orderSchema);

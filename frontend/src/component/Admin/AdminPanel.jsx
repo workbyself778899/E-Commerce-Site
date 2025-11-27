@@ -53,6 +53,13 @@ const AdminPanel = () => {
           </li>
          </Link>
 
+         <Link to="/admin-panel/blog">
+          <li className="flex items-center gap-3 p-3 rounded hover:bg-gray-100 cursor-pointer">
+            <FiUsers size={22} />
+            {open && "Blogs"}
+          </li>
+         </Link>
+
          <Link to="/admin-panel/contact">
           <li className="flex items-center gap-3 p-3 rounded hover:bg-gray-100 cursor-pointer">
             <BiMessageDetail size={22} />
