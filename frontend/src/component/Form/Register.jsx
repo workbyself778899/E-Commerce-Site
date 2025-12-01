@@ -15,7 +15,7 @@ const Register = () => {
 const onSubmit = async(data)=>{
   try {
  
-    const res = await axios.post('https://e-commerce-site-three-kappa.vercel.app/user/register',data)
+    const res = await axios.post('https://e-commerce-site-5h4d.vercel.app/user/register',data)
     toast.success(res.data.message);
     reset(); // Reset the input values 
  

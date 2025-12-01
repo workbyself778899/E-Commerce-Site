@@ -13,7 +13,7 @@ const AdminBlog = () => {
 
   const fetchBlogs = async () => {
     try {
-      const res = await axios.get('https://e-commerce-site-three-kappa.vercel.app/blog/read');
+      const res = await axios.get('https://e-commerce-site-5h4d.vercel.app/blog/read');
       const data = res.data.getBlog || res.data;
       if (Array.isArray(data)) setBlogs(data);
     } catch (err) {
@@ -40,13 +40,13 @@ const AdminBlog = () => {
 
       let res;
       if (editing) {
-        res = await axios.put(`https://e-commerce-site-three-kappa.vercel.app/blog/edit/${editing}`, formData, {
+        res = await axios.put(`https://e-commerce-site-5h4d.vercel.app/blog/edit/${editing}`, formData, {
           headers: { 'auth-token': token, 'Content-Type': 'multipart/form-data' }
         });
         toast.success(res.data.message || 'Blog updated');
         setEditing(null);
       } else {
-        res = await axios.post('https://e-commerce-site-three-kappa.vercel.app/blog/create', formData, {
+        res = await axios.post('https://e-commerce-site-5h4d.vercel.app/blog/create', formData, {
           headers: { 'auth-token': token, 'Content-Type': 'multipart/form-data' }
         });
         toast.success(res.data.message || 'Blog created');
@@ -70,7 +70,7 @@ const AdminBlog = () => {
   const handleDelete = async (id) => {
     if (!window.confirm('Delete this blog?')) return;
     try {
-      const res = await axios.delete(`https://e-commerce-site-three-kappa.vercel.app/blog/delete/${id}`, {
+      const res = await axios.delete(`https://e-commerce-site-5h4d.vercel.app/blog/delete/${id}`, {
         headers: { 'auth-token': token }
       });
       toast.success(res.data.message || 'Deleted');

@@ -50,7 +50,7 @@ const SingleProduct = ({name}) => {
       toast.warning("Please login first");
       return;
     }
-    const res = await axios.post(`https://e-commerce-site-three-kappa.vercel.app/user/add-to-cart/${id}`,{
+    const res = await axios.post(`https://e-commerce-site-5h4d.vercel.app/user/add-to-cart/${id}`,{
       productId,
       quantity: count
     });
@@ -66,7 +66,7 @@ const SingleProduct = ({name}) => {
   const fav = async(productId)=>{
    try {
     
-    const res = await axios.post(`https://e-commerce-site-three-kappa.vercel.app/user/add-to-fav/${userId}`,{
+    const res = await axios.post(`https://e-commerce-site-5h4d.vercel.app/user/add-to-fav/${userId}`,{
       productId
     })
     toast.success(res.data.message)
@@ -79,7 +79,7 @@ const SingleProduct = ({name}) => {
 
   useEffect(()=>{
     const getProduct = async()=>{
-    const res = await axios.get(`https://e-commerce-site-three-kappa.vercel.app/product/get-one/${id}`)
+    const res = await axios.get(`https://e-commerce-site-5h4d.vercel.app/product/get-one/${id}`)
     console.log(res.data.getProduct)
     setProduct(res.data.getProduct)
   }

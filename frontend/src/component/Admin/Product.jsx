@@ -32,7 +32,7 @@ const Product = () => {
       let res
       if (editing) {
         // edit existing product
-        res = await axios.put(`https://e-commerce-site-three-kappa.vercel.app/product/edit/${editing}`, formData, {
+        res = await axios.put(`https://e-commerce-site-5h4d.vercel.app/product/edit/${editing}`, formData, {
           headers: {
             'auth-token': token,
             "Content-Type": "multipart/form-data"
@@ -42,7 +42,7 @@ const Product = () => {
         setEditing(null)
       } else {
         // add new
-        res = await axios.post("https://e-commerce-site-three-kappa.vercel.app/product/add", formData, {
+        res = await axios.post("https://e-commerce-site-5h4d.vercel.app/product/add", formData, {
           headers: {
             'auth-token': token,
             "Content-Type": "multipart/form-data"
@@ -72,7 +72,7 @@ const Product = () => {
 
   const fetchProducts = async () => {
     try {
-      const res = await axios.get('https://e-commerce-site-three-kappa.vercel.app/product/get-all')
+      const res = await axios.get('https://e-commerce-site-5h4d.vercel.app/product/get-all')
       // backend returns {message, getAll?} let's inspect res.data
       // Expect an array in res.data.getProduct or res.data.products or res.data
       const data = res.data.getProduct || res.data.products || res.data;
@@ -96,7 +96,7 @@ const Product = () => {
   const handleDelete = async (id) => {
     if (!window.confirm('Delete this product?')) return
     try {
-      const res = await axios.delete(`https://e-commerce-site-three-kappa.vercel.app/product/delete/${id}`, {
+      const res = await axios.delete(`https://e-commerce-site-5h4d.vercel.app/product/delete/${id}`, {
         headers: { 'auth-token': token }
       })
       toast.success(res.data.message || 'Deleted')
@@ -109,7 +109,7 @@ const Product = () => {
 
   const addToFeatured = async (section, productId) => {
     try {
-      const res = await axios.post('https://e-commerce-site-three-kappa.vercel.app/featured/add', { section, productId }, { headers: { 'auth-token': token } })
+      const res = await axios.post('https://e-commerce-site-5h4d.vercel.app/featured/add', { section, productId }, { headers: { 'auth-token': token } })
       toast.success(res.data.message || 'Added to featured')
     } catch (err) {
       console.error('Failed to add to featured', err)

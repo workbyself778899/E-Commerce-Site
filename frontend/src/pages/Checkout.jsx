@@ -18,7 +18,7 @@ const Checkout = () => {
   // Fetch cart
   const getCart = async (userId) => {
     try {
-      const res = await axios.get(`https://e-commerce-site-three-kappa.vercel.app/user/get-cart/${userId}`);
+      const res = await axios.get(`https://e-commerce-site-5h4d.vercel.app/user/get-cart/${userId}`);
       setCart(res.data.cart || []);
     } catch (err) {
       console.log("Fetch Cart Error:", err.message);
@@ -52,7 +52,7 @@ const Checkout = () => {
         userId: userId || undefined,
       };
       console.log("data",data)
-      const res = await axios.post("https://e-commerce-site-three-kappa.vercel.app/order/add", orderData);
+      const res = await axios.post("https://e-commerce-site-5h4d.vercel.app/order/add", orderData);
       toast.success("Order placed successfully!");
       reset();
       nav('/')

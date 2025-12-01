@@ -15,7 +15,7 @@ const Cart = () => {
   const getCart = async () => {
     try {
       const res = await axios.get(
-        `https://e-commerce-site-three-kappa.vercel.app/user/get-cart/${userId}`
+        `https://e-commerce-site-5h4d.vercel.app/user/get-cart/${userId}`
       );
       setCart(res.data.cart || []);
     } catch (err) {
@@ -27,7 +27,7 @@ const Cart = () => {
   const removeItem = async (productId) => {
     try {
       await axios.delete(
-        `https://e-commerce-site-three-kappa.vercel.app/user/remove-from-cart/${userId}/${productId}`
+        `https://e-commerce-site-5h4d.vercel.app/user/remove-from-cart/${userId}/${productId}`
       );
 
       setCart((prev) => prev.filter((i) => i.productId._id !== productId));

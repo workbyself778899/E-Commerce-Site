@@ -13,7 +13,7 @@ const ForgetPass = () => {
 
   const onSubmit = async(data) => { 
     console.log("Email submitted:", data.email);
-    const res = await axios.post("https://e-commerce-site-three-kappa.vercel.app/user/enter-email",data)
+    const res = await axios.post("https://e-commerce-site-5h4d.vercel.app/user/enter-email",data)
     //  console.log(res)
     if(res.status == 200){
 

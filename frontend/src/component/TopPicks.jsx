@@ -8,7 +8,7 @@ const TopPicks = () => {
   useEffect(() => {
     const fetch = async () => {
       try {
-        const res = await axios.get('https://e-commerce-site-three-kappa.vercel.app/featured/read')
+        const res = await axios.get('https://e-commerce-site-5h4d.vercel.app/featured/read')
         const data = res.data.topPicks || []
         setItems(data)
       } catch (err) {
