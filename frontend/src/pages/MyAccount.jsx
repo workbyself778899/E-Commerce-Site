@@ -25,7 +25,7 @@ const [orders, setOrders] = useState([])
 useEffect(()=>{
   const getUser = async()=>{  
     try {
-    const res = await axios.get(`http://localhost:3900/user/details/${id}`)
+    const res = await axios.get(`https://e-commerce-site-three-kappa.vercel.app/user/details/${id}`)
   console.log("user", res.data.user)
   setData(res.data.user)
     } catch (error) {
@@ -39,7 +39,7 @@ useEffect(() => {
   const fetchOrders = async () => {
     try {
       const token = localStorage.getItem('u-token')
-      const res = await axios.get('http://localhost:3900/order/user', { headers: { 'auth-token': token } })
+      const res = await axios.get('https://e-commerce-site-three-kappa.vercel.app/order/user', { headers: { 'auth-token': token } })
       const data = res.data.orders || res.data.getOrder || []
       if (Array.isArray(data)) setOrders(data)
     } catch (err) {

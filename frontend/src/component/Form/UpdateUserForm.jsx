@@ -25,7 +25,7 @@ export default function UpdateUserForm( ) {
     console.log(formData)
     try {
       const res = await axios.put(
-        `http://localhost:3900/user/edit?id=${id}`,
+        `https://e-commerce-site-three-kappa.vercel.app/user/edit?id=${id}`,
         formData,{
             headers:{
                 'auth-token':token

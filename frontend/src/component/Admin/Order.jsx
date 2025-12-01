@@ -10,7 +10,7 @@ const Order = () => {
 
   const fetchOrders = async () => {
     try {
-      const res = await axios.get('http://localhost:3900/order/all', { headers: { 'auth-token': token } })
+      const res = await axios.get('https://e-commerce-site-three-kappa.vercel.app/order/all', { headers: { 'auth-token': token } })
       const data = res.data.getOrder || res.data
       if (Array.isArray(data)) setOrders(data)
     } catch (err) {
@@ -24,7 +24,7 @@ const Order = () => {
   const handleDelete = async (id) => {
     if (!window.confirm('Delete this order?')) return
     try {
-      const res = await axios.delete(`http://localhost:3900/order/delete/${id}`, { headers: { 'auth-token': token } })
+      const res = await axios.delete(`https://e-commerce-site-three-kappa.vercel.app/order/delete/${id}`, { headers: { 'auth-token': token } })
       toast.success(res.data.message || 'Deleted')
       fetchOrders()
     } catch (err) {
@@ -35,7 +35,7 @@ const Order = () => {
 
   const handleUpdateStatus = async (id, status) => {
     try {
-      const res = await axios.put(`http://localhost:3900/order/update/${id}`, { order_status: status }, { headers: { 'auth-token': token } })
+      const res = await axios.put(`https://e-commerce-site-three-kappa.vercel.app/order/update/${id}`, { order_status: status }, { headers: { 'auth-token': token } })
       toast.success(res.data.message || 'Updated')
       fetchOrders()
     } catch (err) {
@@ -47,7 +47,7 @@ const Order = () => {
   const handleTogglePayment = async (id, current) => {
     try {
       const next = current === 'Paid' ? 'Unpaid' : 'Paid'
-      const res = await axios.put(`http://localhost:3900/order/update/${id}`, { payment_status: next }, { headers: { 'auth-token': token } })
+      const res = await axios.put(`https://e-commerce-site-three-kappa.vercel.app/order/update/${id}`, { payment_status: next }, { headers: { 'auth-token': token } })
       toast.success(res.data.message || 'Payment status updated')
       fetchOrders()
     } catch (err) {

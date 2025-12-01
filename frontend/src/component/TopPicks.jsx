@@ -8,7 +8,7 @@ const TopPicks = () => {
   useEffect(() => {
     const fetch = async () => {
       try {
-        const res = await axios.get('http://localhost:3900/featured/read')
+        const res = await axios.get('https://e-commerce-site-three-kappa.vercel.app/featured/read')
         const data = res.data.topPicks || []
         setItems(data)
       } catch (err) {
@@ -23,9 +23,8 @@ const TopPicks = () => {
   return (
     <div className="max-w-6xl mx-auto my-12 px-4">
       <div className="flex flex-col items-center justify-center mb-4">
-        <h2 className="text-[36px] font-medium">Top Picks For You</h2>
-        <p className='font-medium text-[#9F9F9F]'>Find a bright ideal to suit your taste with our great selection of suspension, floor and table lights.</p>
-       
+        <h2 className="text-2xl md:text-[36px] font-medium">Top Picks For You</h2>
+        <p className='font-medium text-[#9F9F9F] text-sm md:text-base'>Find a bright ideal to suit your taste with our great selection of suspension, floor and table lights.</p>
       </div>
 
  <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-6 place-items-center">
@@ -33,10 +32,10 @@ const TopPicks = () => {
     <Link
       key={p._id}
       to={`/single-product/${p._id}`}
-      className="w-[260px] h-[380px] bg-white rounded  p-4  flex flex-col "
+      className="w-full max-w-xs md:max-w-[260px] bg-white rounded p-4 flex flex-col"
     >
       {/* CONSTANT IMAGE BOX (SAME SIZE ALWAYS) */}
-      <div className="w-full h-[250px] flex items-center justify-center">
+      <div className="w-full h-48 md:h-[250px] flex items-center justify-center">
         <img
           src={p.photo}
           alt={p.name}
@@ -45,7 +44,7 @@ const TopPicks = () => {
       </div>
 
       {/* TEXT ALWAYS STRAIGHT & ALIGNED FROM LEFT */}
-      <div className="flex flex-col">
+      <div className="flex flex-col mt-3">
         <div className="font-medium truncate">{p.name}</div>
         <div className="text-sm text-gray-600">Rs. {p.price}</div>
       </div>
@@ -55,7 +54,7 @@ const TopPicks = () => {
 
 
 <div className="flex justify-center">
-    <Link to="/shop" className="text-[20px] font-medium border-b-2   text-center mt-4">
+    <Link to="/shop" className="text-[16px] md:text-[20px] font-medium border-b-2 text-center mt-4">
   View more
 </Link>
 </div>

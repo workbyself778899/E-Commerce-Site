@@ -29,7 +29,7 @@ const formattedDate = (dateString) => {
   useEffect(() => {
     const fetch = async () => {
       try {
-        const res = await axios.get('http://localhost:3900/blog/read')
+        const res = await axios.get('https://e-commerce-site-three-kappa.vercel.app/blog/read')
         console.log('blog', res)
         const data = res.data.getBlog 
         if (Array.isArray(data)) setBlogs(data)
@@ -42,33 +42,37 @@ const formattedDate = (dateString) => {
 
   return (
     <>
-      <div className='bg-[#FBEBB5] flex justify-between items-center pt-8 pr-20 pl-70 '>
-        <div className="">
-          <h1 className="py-2 font-medium text-[64px]">
-            <div className="">Rocket single</div>
-            <div className="pb-3">seater</div>
-          </h1>
-          <Link to='/shop'>
-            <button className='border-b-2 pb-2 cursor-pointer font-medium text-[24px] '>Shop Now</button>
-          </Link>
-        </div>
+      <div className='bg-[#FBEBB5]'>
+        <div className="max-w-6xl mx-auto px-4 py-8 md:py-16 grid grid-cols-1 md:grid-cols-2 gap-6 items-center">
+          <div>
+            <h1 className="py-2 font-medium text-3xl md:text-[64px] leading-tight">
+              <div>Rocket single</div>
+              <div className="pb-3">seater</div>
+            </h1>
+            <Link to='/shop'>
+              <button className='border-b-2 pb-2 cursor-pointer font-medium text-[18px] md:text-[24px]'>Shop Now</button>
+            </Link>
+          </div>
 
-        <div className="">
-          <img src="/chair 1.png" className='h-[700px]  ' alt="No image" />
+          <div className="flex justify-center md:justify-end">
+            <img src="/chair 1.png" className='w-full max-w-md md:max-w-none h-auto object-contain' alt="No image" />
+          </div>
         </div>
       </div>
        <HeroTable />
       <TopPicks />
 
     {/* Simple banner */}
-    <div className="bg-[#FFF9E5] h-[639px]  flex items-center justify-between  ">
-      <div className="">
-        <img src="https://ik.imagekit.io/zx6p823zj/Asgaard_sofa_2__wf-W6Qf_.png" className='h-[600px] object-contain ' alt="" />
-      </div>
-      <div className="mr-19 flex flex-col justify-center items-center ">
-        <p className="font-medium text-[24px] text-center ">New Arrivals</p>
-        <p className="font-bold text-[48px] text-center ">Asgaard sofa</p>
-        <Link to='/shop'> <button className='px-9 py-3 mt-10 border' > Order Now </button> </Link>
+    <div className="bg-[#FFF9E5] py-8 md:py-16">
+      <div className="max-w-6xl mx-auto px-4 grid grid-cols-1 md:grid-cols-2 items-center gap-6">
+        <div className="flex justify-center md:justify-start">
+          <img src="https://ik.imagekit.io/zx6p823zj/Asgaard_sofa_2__wf-W6Qf_.png" className='w-full max-w-md md:max-w-none h-auto object-contain' alt="" />
+        </div>
+        <div className="flex flex-col justify-center items-center md:items-start text-center md:text-left">
+          <p className="font-medium text-[18px] md:text-[24px]">New Arrivals</p>
+          <p className="font-bold text-[28px] md:text-[48px]">Asgaard sofa</p>
+          <Link to='/shop'> <button className='px-6 md:px-9 py-2 mt-6 border' > Order Now </button> </Link>
+        </div>
       </div>
     </div>
 
@@ -82,17 +86,20 @@ const formattedDate = (dateString) => {
 
         <div className="grid place-items-center grid-cols-1  md:grid-cols-3  gap-9">
           {blogs.slice(0,3).map(b => (
-            <div key={b._id} className="bg-white w-[393px] rounded ">
-              {b.image && <img src={b.image} alt={b.title} className="w-[393px] h-[393px] object-contain object-center rounded mb-3" />}
-              <div className="font-semibold text-center text-lg">{b.title}</div>
-            
-                         <div className="mt-3 flex justify-center items-center">
-                <Link to={`/blog/${b._id}`} className="font-medium text-[24px]  border-b-2  ">Read More</Link>
+            <div key={b._id} className="bg-white w-full max-w-sm rounded overflow-hidden">
+              {b.image && <img src={b.image} alt={b.title} className="w-full h-56 md:h-80 object-contain object-center rounded-b mb-3" />}
+              <div className="p-4">
+                <div className="font-semibold text-center md:text-left text-lg">{b.title}</div>
+
+                <div className="mt-3 flex justify-center md:justify-start items-center">
+                  <Link to={`/blog/${b._id}`} className="font-medium text-[18px] md:text-[20px] border-b-2">Read More</Link>
+                </div>
+
+                <div className="flex mt-4 items-center gap-6 justify-center md:justify-start">
+                  <p className=" flex gap-3 items-center "><MdAccessTime /> 5 min</p>
+                  <p className=" flex gap-3 items-center "> <MdOutlineDateRange />  {formattedDate(b.updatedAt)} </p>
+                </div>
               </div>
-           <div className="flex mt-4 items-center gap-9 justify-center">
-            <p className=" flex gap-3 items-center "><MdAccessTime /> 5 min</p>
-            <p className=" flex gap-3 items-center "> <MdOutlineDateRange />  {formattedDate(b.updatedAt)} </p>
-           </div>
             </div>
           ))}
         </div>

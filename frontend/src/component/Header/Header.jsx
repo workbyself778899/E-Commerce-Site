@@ -40,7 +40,7 @@ const userId = localStorage.getItem('uid');
         <ul className='flex items-center justify-baseline gap-6 text-[16px] cursor-pointer'>
           
             <Link to="/myaccount">  <li> <FaRegUser size={18} /> </li> </Link>
-            <li> <FiSearch size={18} /> </li>
+           <Link to="/shop"> <li> <FiSearch size={18} /> </li></Link>
             <li onClick={()=>setShowFav(!showFav)}> <FaRegHeart size={18} /></li>
             <li onClick={()=>setshowCart(!showCart)}> <AiOutlineShoppingCart size={18}/> </li> 
            

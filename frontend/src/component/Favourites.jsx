@@ -13,7 +13,7 @@ const Favourites = ({ setShowFav, showFav }) => {
   const removeFav = async (productId) => {
     try {
       const res = await axios.delete(
-        `http://localhost:3900/user/remove-from-fav/${userId}/${productId}`
+        `https://e-commerce-site-three-kappa.vercel.app/user/remove-from-fav/${userId}/${productId}`
       );
 
       toast.warn(res.data.message);
@@ -31,7 +31,7 @@ const Favourites = ({ setShowFav, showFav }) => {
   const getFav = async () => {
     try {
       const res = await axios.get(
-        `http://localhost:3900/user/get-fav-products/${userId}`
+        `https://e-commerce-site-three-kappa.vercel.app/user/get-fav-products/${userId}`
       );
 
       console.log("Fav Data:", res.data.favourites);

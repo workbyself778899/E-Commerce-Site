@@ -5,7 +5,7 @@ import { FiShoppingCart } from "react-icons/fi";
 const ProductCard = ({name, price, image}) => {
 
   return (
-    <div className="flex flex-col items-center justify-between w-[287px] h-[397px] bg-white rounded-xl  overflow-hidden hover:shadow-xl transition-all duration-300">
+    <div className="flex flex-col  px-3 items-center justify-between w-[287px] h-[397px] bg-white rounded-xl  overflow-hidden hover:shadow-xl transition-all duration-300">
       
       {/* Product Image */}
       <div className=" flex items-center justify-center overflow-hidden">

@@ -21,7 +21,7 @@ const ResetPass = () => {
     try {
       console.log(data)
       const res = await axios.post(
-        `http://localhost:3900/user/reset/${id}/${token}`,
+        `https://e-commerce-site-three-kappa.vercel.app/user/reset/${id}/${token}`,
         data
       );
 

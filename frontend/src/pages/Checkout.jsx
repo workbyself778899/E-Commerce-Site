@@ -18,7 +18,7 @@ const Checkout = () => {
   // Fetch cart
   const getCart = async (userId) => {
     try {
-      const res = await axios.get(`http://localhost:3900/user/get-cart/${userId}`);
+      const res = await axios.get(`https://e-commerce-site-three-kappa.vercel.app/user/get-cart/${userId}`);
       setCart(res.data.cart || []);
     } catch (err) {
       console.log("Fetch Cart Error:", err.message);
@@ -52,7 +52,7 @@ const Checkout = () => {
         userId: userId || undefined,
       };
       console.log("data",data)
-      const res = await axios.post("http://localhost:3900/order/add", orderData);
+      const res = await axios.post("https://e-commerce-site-three-kappa.vercel.app/order/add", orderData);
       toast.success("Order placed successfully!");
       reset();
       nav('/')
@@ -69,129 +69,123 @@ const Checkout = () => {
     <div>
       <SecondHeader text="Checkout" />
       <ToastContainer />
-      <div className="flex justify-around my-10">
-        {/* LEFT SIDE — Billing Details */}
-        <div className="w-[608px] p-2 ">
+      <div className="max-w-6xl mx-auto px-4 my-8">
+        {/* LEFT SIDE — Billing Details and RIGHT SIDE — Order Summary stack on small screens */}
+        <form className="flex flex-col md:flex-row md:items-start md:gap-8" onSubmit={handleSubmit(onSubmit)}>
+          <div className="w-full md:w-2/3 p-2">
+            <h2 className="text-2xl md:text-[36px] font-semibold mb-6">Billing Details</h2>
 
-
-          <form className="flex items-start gap-20 justify-center " onSubmit={handleSubmit(onSubmit)}>
-            {/* Left Part  */}
-            <div className="">
-              <h2 className="text-[36px] font-semibold mb-10">Billing Details</h2>
-              {/* First & Last Name */}
-              <div className="flex gap-6 mb-10">
-                <div className="flex flex-col">
-                  <label className="font-medium pb-4">First Name</label>
-                  <input
-                    {...register("fname", { required: true })}
-                    className="border px-3 h-[75px] rounded-lg"
-                  />
-                  {errors.fname && <p className="text-red-500">Required</p>}
-                </div>
-
-                <div className="flex flex-col">
-                  <label className="font-medium pb-4">Last Name</label>
-                  <input
-                    {...register("lname", { required: true })}
-                    className="border px-3 h-[75px] rounded-lg"
-                  />
-                  {errors.lname && <p className="text-red-500">Required</p>}
-                </div>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
+              <div className="flex flex-col">
+                <label className="font-medium pb-2">First Name</label>
+                <input
+                  {...register("fname", { required: true })}
+                  className="border px-3 h-12 md:h-[75px] rounded-lg"
+                />
+                {errors.fname && <p className="text-red-500">Required</p>}
               </div>
 
-              {/* Company */}
-              <div className="flex flex-col mb-10">
-                <label className="font-medium pb-4">Company Name (Optional)</label>
-                <input {...register("company_name")} className="border px-3 h-[75px] rounded-lg" />
+              <div className="flex flex-col">
+                <label className="font-medium pb-2">Last Name</label>
+                <input
+                  {...register("lname", { required: true })}
+                  className="border px-3 h-12 md:h-[75px] rounded-lg"
+                />
+                {errors.lname && <p className="text-red-500">Required</p>}
               </div>
+            </div>
 
-              {/* Country */}
-              <div className="flex flex-col mb-10">
-                <label className="font-medium pb-4">Country / Region</label>
-                <select {...register("country", { required: true })} className="border px-3 h-[75px] rounded-lg">
+            <div className="flex flex-col mb-4">
+              <label className="font-medium pb-2">Company Name (Optional)</label>
+              <input {...register("company_name")} className="border px-3 h-12 md:h-[75px] rounded-lg" />
+            </div>
+
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <div className="flex flex-col mb-4">
+                <label className="font-medium pb-2">Country / Region</label>
+                <select {...register("country", { required: true })} className="border px-3 h-12 md:h-[75px] rounded-lg">
                   <option value="Nepal">Nepal</option>
                   <option value="India">India</option>
                   <option value="China">China</option>
                 </select>
               </div>
 
-              {/* Address */}
-              <div className="flex flex-col mb-10">
-                <label className="font-medium pb-4">Street Address</label>
-                <input {...register("address", { required: true })} className="border px-3 h-[75px] rounded-lg" />
-              </div>
-
-              {/* City */}
-              <div className="flex flex-col mb-10">
-                <label className="font-medium pb-4">Town / City</label>
-                <input {...register("city", { required: true })} className="border px-3 h-[75px] rounded-lg" />
-              </div>
-
-              {/* Province */}
-              <div className="flex flex-col mb-10">
-                <label className="font-medium pb-4">Province</label>
-                <select {...register("province", { required: true })} className="border px-3 h-[75px] rounded-lg">
+              <div className="flex flex-col mb-4">
+                <label className="font-medium pb-2">Province</label>
+                <select {...register("province", { required: true })} className="border px-3 h-12 md:h-[75px] rounded-lg">
                   <option value="Bagmati">Bagmati</option>
                   <option value="Gandaki">Gandaki</option>
                   <option value="Lumbini">Lumbini</option>
                 </select>
               </div>
+            </div>
 
-              {/* Zip */}
-              <div className="flex flex-col mb-10">
-                <label className="font-medium pb-4">Zip Code</label>
-                <input {...register("zip_code")} className="border px-3 h-[75px] rounded-lg" />
+            <div className="flex flex-col mb-4">
+              <label className="font-medium pb-2">Street Address</label>
+              <input {...register("address", { required: true })} className="border px-3 h-12 md:h-[75px] rounded-lg" />
+            </div>
+
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <div className="flex flex-col mb-4">
+                <label className="font-medium pb-2">Town / City</label>
+                <input {...register("city", { required: true })} className="border px-3 h-12 md:h-[75px] rounded-lg" />
               </div>
 
-              {/* Phone */}
-              <div className="flex flex-col mb-10">
-                <label className="font-medium pb-4">Phone</label>
+              <div className="flex flex-col mb-4">
+                <label className="font-medium pb-2">Zip Code</label>
+                <input {...register("zip_code")} className="border px-3 h-12 md:h-[75px] rounded-lg" />
+              </div>
+            </div>
+
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <div className="flex flex-col mb-4">
+                <label className="font-medium pb-2">Phone</label>
                 <input
                   {...register("phone", { required: true })}
-                  className="border px-3 h-[75px] rounded-lg"
+                  className="border px-3 h-12 md:h-[75px] rounded-lg"
                 />
               </div>
 
-              {/* Email */}
-              <div className="flex flex-col mb-10">
-                <label className="font-medium pb-4">Email Address</label>
+              <div className="flex flex-col mb-4">
+                <label className="font-medium pb-2">Email Address</label>
                 <input
                   {...register("email", { required: true })}
-                  className="border px-3 h-[75px] rounded-lg"
-                />
-              </div>
-
-              {/* Additional Info */}
-              <div className="flex flex-col mb-10">
-                <label className="font-medium pb-4">Additional Information</label>
-                <input
-                  {...register("details")}
-                  className="border px-3 h-[75px] rounded-lg"
-                  placeholder="Optional"
+                  className="border px-3 h-12 md:h-[75px] rounded-lg"
                 />
               </div>
             </div>
-            {/* RIGHT SIDE — Order Summary */}
-            <div className="w-[533px]">
 
-              <h2 className="text-[28px] font-semibold mb-5">Order Summary</h2>
+            <div className="flex flex-col mb-4">
+              <label className="font-medium pb-2">Additional Information</label>
+              <input
+                {...register("details")}
+                className="border px-3 h-12 md:h-[75px] rounded-lg"
+                placeholder="Optional"
+              />
+            </div>
+          </div>
 
-              <table className="w-[533px] border-collapse">
+          {/* RIGHT SIDE — Order Summary */}
+          <div className="w-full md:w-1/3 p-2 mt-6 md:mt-0">
+            <h2 className="text-xl md:text-[28px] font-semibold mb-4">Order Summary</h2>
+
+            <div className="w-full border rounded p-4">
+              <table className="w-full border-collapse">
                 <thead>
-                  <tr className="">
-                    <th className="text-left py-3 font-medium text-[24px]">Product</th>
-                    <th className="text-right py-3 font-medium text-[24px]">Subtotal</th>
+                  <tr>
+                    <th className="text-left py-2 font-medium text-[16px]">Product</th>
+                    <th className="text-right py-2 font-medium text-[16px]">Subtotal</th>
                   </tr>
                 </thead>
 
                 <tbody>
                   {cart.map((item) => (
-                    <tr key={item.productId._id} className="">
-                      <td className="py-3">
-                        {item.productId.name}
-                        <span className="text-gray-600"> × {item.quantity}</span>
+                    <tr key={item.productId._id}>
+                      <td className="py-2">
+                        <div className="text-sm md:text-base">{item.productId.name}</div>
+                        <div className="text-gray-600 text-xs">× {item.quantity}</div>
                       </td>
-                      <td className="text-right py-3">
+                      <td className="text-right py-2">
                         Rs. {formatCurrency(item.productId.price * item.quantity)}
                       </td>
                     </tr>
@@ -199,49 +193,42 @@ const Checkout = () => {
                 </tbody>
               </table>
 
-              {/* Total */}
-              <div className="flex justify-between items-center mt-6 ">
-                <span className="font-normal text-[16px]" >Total</span>
-                <span className="text-[#B88E2F] text-[24px] font-bold ">Rs. {formatCurrency(total)}</span>
+              <div className="flex justify-between items-center mt-4">
+                <span className="font-normal text-[14px]">Total</span>
+                <span className="text-[#B88E2F] text-[20px] font-bold">Rs. {formatCurrency(total)}</span>
               </div>
 
-              <hr className="my-6" />
+              <hr className="my-4" />
 
-              {/* Payment Method */}
-              <div className="my-6">
+              <div className="my-4 text-sm text-gray-700">
                 <p className="flex items-center gap-3">
                   <FaCircle /> Direct Bank Transfer (Not available)
                 </p>
-                <p className="text-[#9F9F9F] mt-4">
-                  Make your payment directly into our bank account...
-                </p>
+                <p className="text-[#9F9F9F] mt-2">Make your payment directly into our bank account...</p>
               </div>
 
-              <div className="flex gap-3 my-3">
+              <div className="flex gap-3 my-2 items-center">
                 <input type="radio" value="bank" {...register("payment")} />
-                <label>Direct Bank Transfer</label>
+                <label className="text-sm">Direct Bank Transfer</label>
               </div>
 
-              <div className="flex gap-3 mb-6">
-                <input type="radio" value="cod" {...register("payment",)} />
-                <label>Cash On Delivery</label>
+              <div className="flex gap-3 mb-4 items-center">
+                <input type="radio" value="cod" {...register("payment")} />
+                <label className="text-sm">Cash On Delivery</label>
               </div>
 
-              {/* Place Order */}
-              <div className="flex justify-center py-6">
+              <div className="flex justify-center py-2">
                 <button
                   type="submit"
-                  className="text-[20px] px-18 py-2 border rounded-2xl hover:bg-[#55f5909e]"
+                  className="text-[16px] px-6 py-2 border rounded-2xl hover:bg-[#55f5909e]"
                 >
                   Place order
                 </button>
               </div>
-
             </div>
+          </div>
 
-
-          </form>
-        </div>
+        </form>
       </div>
     </div>
   );
