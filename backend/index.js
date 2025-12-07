@@ -6,7 +6,12 @@ const cors = require('cors')
 app.use(express.json());
 
 require('dotenv').config(); // Setting .env data from here
-
+ app.use(cors({
+        origin: "*",
+        methods: "GET,POST,PUT,DELETE,OPTIONS",
+        allowedHeaders: "Content-Type,Authorization",
+    }));
+    app.options("*", cors());
 
 
 // Connecting the database.
@@ -39,17 +44,10 @@ app.get('/', (req, res) => {
 
 try {
 
-    app.use(cors({
-        origin: "*",
-        methods: "GET,POST,PUT,DELETE,OPTIONS",
-        allowedHeaders: "Content-Type,Authorization",
-    }));
-    app.options("*", cors());
-
-    app.listen(process.env.PORT, () => {
+       app.listen(process.env.PORT, () => {
         console.log("server running");
     })
-    
+
 } catch (error) {
     console.log(error)
 }
