@@ -17,7 +17,7 @@ const Contact = () => {
   const onSubmit=async(data)=>{
     console.log(data)
     try {
-        const res = await axios.post('https://e-commerce-site-three-kappa.vercel.app//contact/send', data)
+        const res = await axios.post('https://e-commerce-site-three-kappa.vercel.app/contact/send', data)
     console.log(res)
     if(res.status==200){
         toast.success(res.data.message)

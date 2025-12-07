@@ -40,7 +40,7 @@ const Login = () => {
     }
 
     try {
-      const res = await axios.post("https://e-commerce-site-three-kappa.vercel.app//user/login", data);
+      const res = await axios.post("https://e-commerce-site-three-kappa.vercel.app/user/login", data);
 
       if (res.status === 200) {
         toast.success(res.data.message);

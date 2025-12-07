@@ -8,7 +8,7 @@ const HeroTable = () => {
   useEffect(() => {
     const fetch = async () => {
       try {
-        const res = await axios.get('https://e-commerce-site-three-kappa.vercel.app//featured/read')
+        const res = await axios.get('https://e-commerce-site-three-kappa.vercel.app/featured/read')
         const data = res.data.hereTable || []
         setItems(data)
       } catch (err) {

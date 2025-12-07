@@ -10,7 +10,7 @@ export default function ContactList() {
   // Fetch contacts
   const fetchContacts = async () => {
     try {
-      const res = await axios.get("https://e-commerce-site-three-kappa.vercel.app//contact/get",{
+      const res = await axios.get("https://e-commerce-site-three-kappa.vercel.app/contact/get",{
           headers:{
             'auth-token':token
           }
@@ -26,7 +26,7 @@ export default function ContactList() {
   // Delete contact
   const deleteContact = async (id) => {
     try {
-      await axios.delete(`https://e-commerce-site-three-kappa.vercel.app//contact/delete/${id}`,{
+      await axios.delete(`https://e-commerce-site-three-kappa.vercel.app/contact/delete/${id}`,{
           headers:{
             'auth-token':token
           }

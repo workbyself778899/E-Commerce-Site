@@ -9,7 +9,7 @@ const SingleBlog = () => {
   useEffect(() => {
     const fetch = async () => {
       try {
-        const res = await axios.get(`https://e-commerce-site-three-kappa.vercel.app//blog/read/${id}`)
+        const res = await axios.get(`https://e-commerce-site-three-kappa.vercel.app/blog/read/${id}`)
         const data = res.data.getBlog || res.data
         setBlog(data)
       } catch (err) {

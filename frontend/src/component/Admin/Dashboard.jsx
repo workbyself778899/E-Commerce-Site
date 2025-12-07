@@ -9,20 +9,20 @@ const Dashboard = () => {
   const [countOrder, setCountOrder] = useState();
   // count total Product 
   const countProduct = async()=>{
-     const res =await axios.get("https://e-commerce-site-three-kappa.vercel.app//product/get-all")
+     const res =await axios.get("https://e-commerce-site-three-kappa.vercel.app/product/get-all")
     // console.log(res.data.getProduct.length)
     setProduct(res.data.getProduct.length)
   }
 
   //Count total user
     const User = async()=>{
-      const res =await axios.get("https://e-commerce-site-three-kappa.vercel.app//user/all-user")
+      const res =await axios.get("https://e-commerce-site-three-kappa.vercel.app/user/all-user")
       setCountUser(res.data.data)
     }
 
     // count total Order 
     const Order = async()=>{
-        const res = await axios.get("https://e-commerce-site-three-kappa.vercel.app//order/all",{
+        const res = await axios.get("https://e-commerce-site-three-kappa.vercel.app/order/all",{
           headers:{ 'auth-token': localStorage.getItem('u-token')}
         })
         console.log("order",res)

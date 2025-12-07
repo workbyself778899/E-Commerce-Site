@@ -29,7 +29,7 @@ const formattedDate = (dateString) => {
   useEffect(() => {
     const fetch = async () => {
       try {
-        const res = await axios.get('https://e-commerce-site-three-kappa.vercel.app//blog/read')
+        const res = await axios.get('https://e-commerce-site-three-kappa.vercel.app/blog/read')
         console.log('blog', res)
         const data = res.data.getBlog 
         if (Array.isArray(data)) setBlogs(data)

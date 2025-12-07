@@ -73,7 +73,7 @@ router.post("/enter-email",async(req,res)=>{
       
       const token = jwt.sign({ id: user._id, email: user.email }, secret, { expiresIn: '30d' });
   
-       const resetURL = `https://e-commerce-site-three-kappa.vercel.app//user/reset/${user._id}/${token}`;
+       const resetURL = `https://e-commerce-site-three-kappa.vercel.app/user/reset/${user._id}/${token}`;
   
       const transporter = nodemailer.createTransport({
         service: 'gmail',

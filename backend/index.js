@@ -6,7 +6,8 @@ const cors = require('cors')
 app.use(express.json());
 
 require('dotenv').config(); // Setting .env data from here
-app.use(cors());
+app.options("*", cors());
+
 
 // Connecting the database.
 require("./dbConnection/dbConnect");
