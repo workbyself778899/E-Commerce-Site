@@ -9,7 +9,7 @@ const FeaturedAdmin = () => {
 
   const fetch = async () => {
     try {
-      const res = await axios.get('https://e-commerce-site-5h4d.vercel.app/featured/read')
+      const res = await axios.get('https://e-commerce-site-three-kappa.vercel.app//featured/read')
       setFeatured({ topPicks: res.data.topPicks || [], hereTable: res.data.hereTable || [] })
     } catch (err) {
       console.error('Failed to fetch featured', err.message)
@@ -22,7 +22,7 @@ const FeaturedAdmin = () => {
   const handleRemove = async (section, productId) => {
     if (!window.confirm('Remove from featured?')) return
     try {
-      const res = await axios.delete(`https://e-commerce-site-5h4d.vercel.app/featured/remove/${section}/${productId}`, { headers: { 'auth-token': token } })
+      const res = await axios.delete(`https://e-commerce-site-three-kappa.vercel.app//featured/remove/${section}/${productId}`, { headers: { 'auth-token': token } })
       toast.success(res.data.message || 'Removed')
       fetch()
     } catch (err) {

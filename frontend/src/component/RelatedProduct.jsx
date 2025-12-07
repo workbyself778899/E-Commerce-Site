@@ -12,7 +12,7 @@ const RelatedProduct = ({ type }) => {
   const fetchProducts = async () => {
       setLoading(true);
     try {
-      const res = await axios.get(`https://e-commerce-site-5h4d.vercel.app/product/type/${type}`);
+      const res = await axios.get(`https://e-commerce-site-three-kappa.vercel.app//product/type/${type}`);
       setProducts(res.data.products);
     } catch (err) {
       console.log(err);

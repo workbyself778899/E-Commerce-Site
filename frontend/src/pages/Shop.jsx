@@ -16,7 +16,7 @@ const Shop = () => {
   useEffect(() => {
     const getAllProduct = async () => {
       try {
-        const res = await axios.get("https://e-commerce-site-5h4d.vercel.app/product/get-all");
+        const res = await axios.get("https://e-commerce-site-three-kappa.vercel.app//product/get-all");
         setProducts(res.data.getProduct);
         console.log(res.data.getProduct)
       } catch (error) {
