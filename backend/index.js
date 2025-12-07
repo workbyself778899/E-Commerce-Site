@@ -6,7 +6,7 @@ const cors = require('cors')
 app.use(express.json());
 
 require('dotenv').config(); // Setting .env data from here
-app.options("*", cors());
+
 
 
 // Connecting the database.
@@ -40,6 +40,12 @@ app.get('/',(req,res)=>{
 try {
     app.listen(process.env.PORT,()=>{
     console.log("server running");
+    app.use(cors({
+  origin: "*",
+  methods: "GET,POST,PUT,DELETE,OPTIONS",
+  allowedHeaders: "Content-Type,Authorization",
+}));
+    app.options("*", cors());
 })
 } catch (error) {
     console.log(error)
