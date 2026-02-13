@@ -29,9 +29,6 @@ const jwt = require('jsonwebtoken');
       }
     );
 
-
-    await user.save();
-
     res.status(200).json({ message: 'Password has been reset' });
   } catch (error) {
     console.log(error);
